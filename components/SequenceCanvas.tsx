@@ -34,9 +34,13 @@ export default function SequenceCanvas({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { frames, progress, ready } = useImageSequence(config);
   const frameIndex = useRef({ i: 0 });
+  const renderRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     onProgress?.(progress);
+    // A frame the playhead already passed may have only just arrived; redraw so
+    // it replaces the fallback that was standing in for it.
+    renderRef.current?.();
   }, [progress, onProgress]);
 
   useGSAP(
@@ -51,7 +55,12 @@ export default function SequenceCanvas({
       ctx.imageSmoothingQuality = 'high';
 
       const render = () => {
-        const img = frames[Math.round(frameIndex.current.i)];
+        const want = Math.round(frameIndex.current.i);
+        // Loading runs ahead of the playhead, but a fast scroll can outrun it.
+        // Fall back to the nearest earlier frame rather than dropping a draw,
+        // so the descent stutters instead of going blank.
+        let img = frames[want];
+        for (let i = want - 1; !img && i >= 0; i--) img = frames[i];
         if (!img) return;
         const { width: cw, height: ch } = canvas;
         const scale = Math.max(cw / img.width, ch / img.height);
@@ -70,6 +79,7 @@ export default function SequenceCanvas({
       };
 
       resize();
+      renderRef.current = render;
       window.addEventListener('resize', resize);
 
       // Created inside useGSAP's context, so it is reverted automatically on
@@ -86,7 +96,10 @@ export default function SequenceCanvas({
         },
       });
 
-      return () => window.removeEventListener('resize', resize);
+      return () => {
+        renderRef.current = null;
+        window.removeEventListener('resize', resize);
+      };
     },
     { scope: wrapRef, dependencies: [ready, config.frameCount, scrollLength] }
   );
