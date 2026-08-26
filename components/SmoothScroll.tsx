@@ -4,6 +4,7 @@ import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
+import { setLenis } from '@/lib/lenis';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -16,6 +17,7 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     const lenis = new Lenis({ lerp: 0.09, wheelMultiplier: 0.9 });
+    setLenis(lenis);
     lenis.on('scroll', ScrollTrigger.update);
 
     const tick = (time: number) => lenis.raf(time * 1000);
@@ -25,6 +27,7 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     gsap.ticker.lagSmoothing(0);
 
     return () => {
+      setLenis(null);
       gsap.ticker.remove(tick);
       gsap.ticker.lagSmoothing(500, 33);
       lenis.destroy();

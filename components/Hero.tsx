@@ -1,31 +1,43 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import SequenceCanvas from './SequenceCanvas';
-import Loader from './Loader';
+import Intro from './Intro';
 import { HERO_SEQUENCE } from '@/lib/sequence';
 import { FRAMES_TO_START } from '@/lib/useImageSequence';
+import { lockScroll, unlockScroll } from '@/lib/lenis';
 
 /**
- * Step 1: the establishing shot. Scroll drives a camera move from the wide
- * aerial of the masterplan down toward the district. Building-level hotspots
- * and the deeper zoom stages land in later steps.
+ * Step 1: the establishing shot. The intro plate holds the visitor while the
+ * sequence loads behind it; entering hands off to a scroll-driven descent over
+ * the district. Building-level hotspots land in later steps.
  */
 export default function Hero() {
   const [progress, setProgress] = useState(0);
   const [ready, setReady] = useState(false);
+  const [entered, setEntered] = useState(false);
 
   const handleProgress = useCallback((p: number) => setProgress(p), []);
   const handleReady = useCallback(() => setReady(true), []);
+  const handleEnter = useCallback(() => setEntered(true), []);
+
+  // The descent is the only thing to scroll, so scrolling before entering would
+  // move the page behind the plate.
+  useEffect(() => {
+    if (entered) unlockScroll();
+    else lockScroll();
+    return unlockScroll;
+  }, [entered]);
 
   return (
     <>
-      {/* The loader tracks progress toward the frames needed to start, not the
-          whole sequence, so the bar fills as the page actually unblocks. */}
-      <Loader
-        progress={Math.min(1, (progress * HERO_SEQUENCE.frameCount) / FRAMES_TO_START)}
-        done={ready}
-      />
+      {!entered && (
+        <Intro
+          progress={Math.min(1, (progress * HERO_SEQUENCE.frameCount) / FRAMES_TO_START)}
+          armed={ready}
+          onEnter={handleEnter}
+        />
+      )}
       <SequenceCanvas
         config={HERO_SEQUENCE}
         scrollLength={4}
