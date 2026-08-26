@@ -59,55 +59,6 @@ body {
   opacity: 0.65;
 }
 
-/* --- loader --- */
-.loader {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  display: grid;
-  place-items: center;
-  background: var(--ink);
-  transition: opacity 0.9s ease, visibility 0.9s ease;
-}
-
-.loader--done {
-  opacity: 0;
-  visibility: hidden;
-}
-
-.loader__inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.25rem;
-  width: min(22rem, 70vw);
-}
-
-.loader__label {
-  font-size: 0.75rem;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-}
-
-.loader__bar {
-  width: 100%;
-  height: 1px;
-  background: var(--rule);
-}
-
-.loader__fill {
-  height: 100%;
-  background: var(--paper);
-  transform-origin: left center;
-  transform: scaleX(0);
-}
-
-.loader__pct {
-  font-size: 0.7rem;
-  letter-spacing: 0.18em;
-  opacity: 0.6;
-}
-
 .placeholder {
   height: 100vh;
   display: grid;
@@ -119,5 +70,102 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .loader { transition: none; }
+  .intro__plate { transition: none; }
+}
+
+/* --- intro gate --- */
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+  background: var(--ink);
+}
+
+.intro__plate {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform-origin: 50% 58%;
+  will-change: transform;
+}
+
+/* Lifts the black wordmark off a bright, busy aerial. */
+.intro__scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 80% at 50% 55%, rgba(11, 13, 14, 0.55), transparent 70%),
+    linear-gradient(to top, rgba(11, 13, 14, 0.5), transparent 55%);
+}
+
+.intro__content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(2rem, 5vh, 3.5rem);
+  padding: 2rem;
+  background: none;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  cursor: default;
+}
+
+.intro__content.is-armed {
+  cursor: pointer;
+}
+
+.intro__logo {
+  width: min(46rem, 74vw);
+  height: auto;
+  /* One black source asset, rendered white over the plate. */
+  filter: brightness(0) invert(1) drop-shadow(0 2px 24px rgba(0, 0, 0, 0.45));
+  opacity: 0.96;
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.intro__content.is-armed:hover .intro__logo {
+  transform: scale(1.02);
+}
+
+.intro__enter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.9rem;
+  width: min(14rem, 50vw);
+}
+
+.intro__enter-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  opacity: 0.55;
+  transition: opacity 0.6s ease;
+}
+
+.intro__content.is-armed .intro__enter-label {
+  opacity: 0.9;
+}
+
+.intro__enter-track {
+  width: 100%;
+  height: 1px;
+  background: rgba(244, 241, 236, 0.28);
+  overflow: hidden;
+}
+
+.intro__enter-fill {
+  display: block;
+  height: 100%;
+  background: var(--paper);
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: transform 0.45s ease;
 }
