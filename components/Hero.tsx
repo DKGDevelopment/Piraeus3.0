@@ -4,6 +4,7 @@ import { useCallback, useState } from 'react';
 import SequenceCanvas from './SequenceCanvas';
 import Loader from './Loader';
 import { HERO_SEQUENCE } from '@/lib/sequence';
+import { FRAMES_TO_START } from '@/lib/useImageSequence';
 
 /**
  * Step 1: the establishing shot. Scroll drives a camera move from the wide
@@ -19,7 +20,12 @@ export default function Hero() {
 
   return (
     <>
-      <Loader progress={progress} done={ready} />
+      {/* The loader tracks progress toward the frames needed to start, not the
+          whole sequence, so the bar fills as the page actually unblocks. */}
+      <Loader
+        progress={Math.min(1, (progress * HERO_SEQUENCE.frameCount) / FRAMES_TO_START)}
+        done={ready}
+      />
       <SequenceCanvas
         config={HERO_SEQUENCE}
         scrollLength={4}

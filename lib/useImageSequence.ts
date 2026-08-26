@@ -5,15 +5,26 @@ import { framePath, pickTier, type SequenceConfig, type SequenceTier } from './s
 
 type Loaded = {
   frames: (HTMLImageElement | null)[];
+  /** Fraction of the whole sequence loaded, for the background indicator. */
   progress: number;
+  /** Enough of the opening is loaded to start scrubbing. */
   ready: boolean;
+  /** Every frame is in; no more fallback to an earlier frame can occur. */
+  complete: boolean;
   tier: SequenceTier | null;
 };
 
 /**
- * Preloads a frame sequence with bounded concurrency and reports progress so the
- * page can hold a loader until the animation can run without stutter. The tier
- * is resolved once on mount: re-picking on resize would restart a 20MB download
+ * Frames needed before the sequence can start. Loading runs roughly in order
+ * and people scroll forward, so the rest arrives ahead of the playhead instead
+ * of holding the whole page behind a full download.
+ */
+export const FRAMES_TO_START = 20;
+
+/**
+ * Preloads a frame sequence with bounded concurrency, releasing the page once
+ * the opening frames are in and continuing in the background. The tier is
+ * resolved once on mount: re-picking on resize would restart a large download
  * mid-scroll, and the canvas cover-fit already handles viewport changes.
  */
 export function useImageSequence(cfg: SequenceConfig, concurrency = 8): Loaded {
@@ -22,6 +33,7 @@ export function useImageSequence(cfg: SequenceConfig, concurrency = 8): Loaded {
   );
   const [progress, setProgress] = useState(0);
   const [ready, setReady] = useState(false);
+  const [complete, setComplete] = useState(false);
   const [tier, setTier] = useState<SequenceTier | null>(null);
 
   useEffect(() => {
@@ -42,6 +54,7 @@ export function useImageSequence(cfg: SequenceConfig, concurrency = 8): Loaded {
             framesRef.current[i] = img;
             done += 1;
             setProgress(done / cfg.frameCount);
+            if (done >= Math.min(FRAMES_TO_START, cfg.frameCount)) setReady(true);
           }
           resolve();
         };
@@ -49,7 +62,10 @@ export function useImageSequence(cfg: SequenceConfig, concurrency = 8): Loaded {
         // A missing frame must not deadlock the loader.
         img.onerror = () => {
           done += 1;
-          if (!cancelled) setProgress(done / cfg.frameCount);
+          if (!cancelled) {
+            setProgress(done / cfg.frameCount);
+            if (done >= Math.min(FRAMES_TO_START, cfg.frameCount)) setReady(true);
+          }
           resolve();
         };
       });
@@ -63,7 +79,7 @@ export function useImageSequence(cfg: SequenceConfig, concurrency = 8): Loaded {
     Promise.all(
       Array.from({ length: Math.min(concurrency, cfg.frameCount) }, worker)
     ).then(() => {
-      if (!cancelled) setReady(true);
+      if (!cancelled) setComplete(true);
     });
 
     return () => {
@@ -71,5 +87,5 @@ export function useImageSequence(cfg: SequenceConfig, concurrency = 8): Loaded {
     };
   }, [cfg, concurrency]);
 
-  return { frames: framesRef.current, progress, ready, tier };
+  return { frames: framesRef.current, progress, ready, complete, tier };
 }
