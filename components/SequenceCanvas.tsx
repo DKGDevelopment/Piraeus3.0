@@ -5,6 +5,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { useImageSequence } from '@/lib/useImageSequence';
+import BuildingLabels from './BuildingLabels';
 import { MAX_DPR, type SequenceConfig } from '@/lib/sequence';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -15,6 +16,8 @@ type Props = {
   scrollLength?: number;
   onProgress?: (p: number) => void;
   onReady?: () => void;
+  /** Overlay the asset callouts tethered to their roofs. */
+  labels?: boolean;
   children?: React.ReactNode;
 };
 
@@ -28,11 +31,12 @@ export default function SequenceCanvas({
   scrollLength = 4,
   onProgress,
   onReady,
+  labels = false,
   children,
 }: Props) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { frames, progress, ready } = useImageSequence(config);
+  const { frames, progress, ready, tier } = useImageSequence(config);
   const frameIndex = useRef({ i: 0 });
   const renderRef = useRef<(() => void) | null>(null);
 
@@ -107,6 +111,9 @@ export default function SequenceCanvas({
   return (
     <div ref={wrapRef} className="sequence">
       <canvas ref={canvasRef} className="sequence__canvas" aria-hidden="true" />
+      {labels && ready && (
+        <BuildingLabels tier={tier} scrollLength={scrollLength} triggerRef={wrapRef} />
+      )}
       {children}
     </div>
   );
