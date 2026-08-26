@@ -5,7 +5,7 @@ import Link from 'next/link';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { BUILDINGS, anchorAt, coverFit } from '@/lib/buildings';
+import { BUILDINGS, CALLOUT_WINDOW, anchorAt, coverFit } from '@/lib/buildings';
 import type { SequenceTier } from '@/lib/sequence';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -50,9 +50,10 @@ export default function BuildingLabels({ tier, scrollLength, triggerRef }: Props
           // again as its anchor leaves the frame during the push-in.
           const inView =
             a.x > -0.05 && a.x < 1.05 && a.y > -0.05 && a.y < 1.05;
-          const opacity = inView
-            ? gsap.utils.clamp(0, 1, (p - b.enter) / 0.06)
-            : 0;
+          // Fade up on cue, then clear as the camera leaves the overhead view.
+          const fadeIn = gsap.utils.clamp(0, 1, (p - b.enter) / 0.05);
+          const fadeOut = gsap.utils.clamp(0, 1, (CALLOUT_WINDOW - p) / 0.05);
+          const opacity = inView ? Math.min(fadeIn, fadeOut) : 0;
 
           gsap.set(el.label, {
             x: text.x,

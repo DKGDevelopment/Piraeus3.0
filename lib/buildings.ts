@@ -27,58 +27,67 @@ export const BUILDINGS: Building[] = [
   {
     id: 'skyway',
     name: 'Skyway',
-    from: { x: 0.217, y: 0.499 },
-    to: { x: 0.050, y: 0.370 },
+    from: { x: 0.197, y: 0.549 },
+    to: { x: 0.128, y: 0.361 },
     label: { x: -0.070, y: -0.140 },
-    enter: 0.10,
+    enter: 0.06,
   },
   {
     id: 'skyblue',
     name: 'Skyblue',
-    from: { x: 0.325, y: 0.622 },
-    to: { x: 0.187, y: 0.533 },
-    label: { x: -0.030, y: -0.185 },
-    enter: 0.14,
+    from: { x: 0.316, y: 0.631 },
+    to: { x: 0.250, y: 0.493 },
+    label: { x: -0.030, y: -0.170 },
+    enter: 0.09,
   },
   {
     id: 'greater',
     name: 'Piraeus Greater Apartments',
-    from: { x: 0.524, y: 0.536 },
-    to: { x: 0.534, y: 0.384 },
-    label: { x: 0.030, y: -0.135 },
-    enter: 0.18,
+    from: { x: 0.566, y: 0.631 },
+    to: { x: 0.600, y: 0.520 },
+    label: { x: -0.020, y: -0.140 },
+    enter: 0.12,
   },
   {
     id: 'gateway',
     name: 'Gateway Business Hub',
-    from: { x: 0.427, y: 0.719 },
-    to: { x: 0.360, y: 0.711 },
+    from: { x: 0.434, y: 0.701 },
+    to: { x: 0.399, y: 0.613 },
     label: { x: -0.150, y: -0.055 },
-    enter: 0.22,
+    enter: 0.15,
   },
   {
     id: 'urban',
     name: 'Urban GL',
-    from: { x: 0.529, y: 0.800 },
-    to: { x: 0.542, y: 0.852 },
+    from: { x: 0.539, y: 0.771 },
+    to: { x: 0.527, y: 0.769 },
     label: { x: 0.075, y: 0.115 },
-    enter: 0.26,
+    enter: 0.18,
   },
   {
     id: 'nexus',
     name: 'S&S Nexus',
-    from: { x: 0.688, y: 0.719 },
-    to: { x: 0.813, y: 0.726 },
+    from: { x: 0.684, y: 0.748 },
+    to: { x: 0.703, y: 0.697 },
     label: { x: 0.115, y: -0.130 },
-    enter: 0.30,
+    enter: 0.21,
   },
 ];
 
+/**
+ * The descent leaves the aerial and drops to street level, where the assets are
+ * no longer laid out to be named. Callouts live in the overhead stretch and
+ * clear before the plunge, so `to` is each anchor's position at the end of this
+ * window rather than at the last frame.
+ */
+export const CALLOUT_WINDOW = 0.36;
+
 /** Anchor position on the frame at a given scrub progress. */
 export function anchorAt(b: Building, p: number) {
+  const t = Math.min(1, p / CALLOUT_WINDOW);
   return {
-    x: b.from.x + (b.to.x - b.from.x) * p,
-    y: b.from.y + (b.to.y - b.from.y) * p,
+    x: b.from.x + (b.to.x - b.from.x) * t,
+    y: b.from.y + (b.to.y - b.from.y) * t,
   };
 }
 
