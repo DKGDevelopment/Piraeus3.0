@@ -45,7 +45,7 @@ export const BUILDINGS: Building[] = [
     name: 'Piraeus Greater Apartments',
     from: { x: 0.524, y: 0.536 },
     to: { x: 0.534, y: 0.384 },
-    label: { x: 0.085, y: -0.120 },
+    label: { x: 0.030, y: -0.135 },
     enter: 0.18,
   },
   {
