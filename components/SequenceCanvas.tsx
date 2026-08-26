@@ -5,7 +5,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { useImageSequence } from '@/lib/useImageSequence';
-import type { SequenceConfig } from '@/lib/sequence';
+import { MAX_DPR, type SequenceConfig } from '@/lib/sequence';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -46,6 +46,9 @@ export default function SequenceCanvas({
 
       const canvas = canvasRef.current!;
       const ctx = canvas.getContext('2d', { alpha: false })!;
+      // Frames are cover-fitted, so most viewports scale them slightly. High-
+      // quality resampling costs little at this frame rate and visibly helps.
+      ctx.imageSmoothingQuality = 'high';
 
       const render = () => {
         const img = frames[Math.round(frameIndex.current.i)];
@@ -58,8 +61,7 @@ export default function SequenceCanvas({
       };
 
       const resize = () => {
-        // Cap DPR at 2: beyond that the fill-rate cost outweighs the visible gain.
-        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
         canvas.width = Math.floor(window.innerWidth * dpr);
         canvas.height = Math.floor(window.innerHeight * dpr);
         canvas.style.width = '100%';

@@ -7,6 +7,9 @@
  * the slow opening and skip through the fast ending. Motion-equalised sampling
  * makes a linear scroll produce a constant perceived speed.
  */
+/** Beyond 2x the fill-rate cost outweighs the visible gain. */
+export const MAX_DPR = 2;
+
 export type SequenceTier = {
   id: string;
   width: number;
@@ -21,19 +24,23 @@ export type SequenceConfig = {
 };
 
 export const HERO_SEQUENCE: SequenceConfig = {
-  frameCount: 126,
+  frameCount: 100,
   ext: 'webp',
   tiers: [
-    { id: 'hero-sm', width: 1080, height: 608 },
-    { id: 'hero', width: 1920, height: 1080 },
+    { id: 'hero-1080', width: 1080, height: 608 },
+    { id: 'hero-1920', width: 1920, height: 1080 },
+    { id: 'hero-2560', width: 2560, height: 1440 },
   ],
 };
 
-/** Smallest tier that covers the viewport, falling back to the largest. */
+/**
+ * Smallest tier that covers the canvas at its real backing-store width, falling
+ * back to the largest. The canvas caps DPR at 2, so this must match that cap:
+ * asking for less means the browser upscales every frame and the sequence reads
+ * soft, which is the most visible quality loss in the whole pipeline.
+ */
 export function pickTier(cfg: SequenceConfig, viewportWidth: number, dpr: number): SequenceTier {
-  // Half-DPR is enough for a moving sequence: detail beyond that is lost to
-  // motion, and the payload cost is linear in pixels.
-  const needed = viewportWidth * Math.min(Math.max(dpr, 1), 2) * 0.5;
+  const needed = viewportWidth * Math.min(Math.max(dpr, 1), MAX_DPR);
   return cfg.tiers.find((t) => t.width >= needed) ?? cfg.tiers[cfg.tiers.length - 1];
 }
 
