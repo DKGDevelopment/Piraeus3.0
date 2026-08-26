@@ -41,6 +41,7 @@ export default function Hero() {
       <SequenceCanvas
         config={HERO_SEQUENCE}
         scrollLength={4}
+        labels
         onProgress={handleProgress}
         onReady={handleReady}
       >

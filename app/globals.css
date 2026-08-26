@@ -169,3 +169,58 @@ body {
   transform: scaleX(0);
   transition: transform 0.45s ease;
 }
+
+/* --- asset callouts --- */
+.labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.labels__lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.labels__line {
+  stroke: var(--paper);
+  stroke-width: 1;
+  stroke-dasharray: 1 5;
+  stroke-linecap: round;
+  opacity: 0;
+}
+
+.labels__item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  /* Positioned by transform from the frame-space mapping; this centres the
+     block on that point without a second layout pass. */
+  translate: -50% -50%;
+  opacity: 0;
+  white-space: nowrap;
+}
+
+.labels__dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--paper);
+  box-shadow: 0 0 0 4px rgba(11, 13, 14, 0.35);
+  flex: none;
+}
+
+.labels__name {
+  font-size: clamp(0.7rem, 1vw, 0.85rem);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--paper);
+  text-shadow: 0 1px 12px rgba(11, 13, 14, 0.85);
+}
