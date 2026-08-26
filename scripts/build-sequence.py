@@ -9,8 +9,8 @@ time. Apparent motion accelerates as a camera closes on its subject, so even
 time sampling spends frames on the slow opening and skips through the fast
 ending. Motion-equalised sampling makes a linear scroll read as constant speed.
 
-Writes public/sequence/<id>/ for the widest tier and <id>-sm/ for the rest,
-then prints the config to paste into lib/sequence.ts.
+Writes public/sequence/<id>-<width>/ per tier, then prints the config to
+paste into lib/sequence.ts.
 """
 import argparse, glob, os, shutil, subprocess, sys, tempfile
 
@@ -74,7 +74,7 @@ def main():
 
         tiers = []
         for w in widths:
-            tier_id = args.id if w == widths[-1] else f'{args.id}-sm'
+            tier_id = f'{args.id}-{w}'
             out = os.path.join('public', 'sequence', tier_id)
             shutil.rmtree(out, ignore_errors=True)
             os.makedirs(out)

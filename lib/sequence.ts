@@ -24,12 +24,12 @@ export type SequenceConfig = {
 };
 
 export const HERO_SEQUENCE: SequenceConfig = {
-  frameCount: 126,
+  frameCount: 100,
   ext: 'webp',
   tiers: [
-    { id: 'hero-sm', width: 1080, height: 608 },
-    { id: 'hero', width: 1920, height: 1080 },
-    { id: 'hero-xl', width: 2560, height: 1440 },
+    { id: 'hero-1080', width: 1080, height: 608 },
+    { id: 'hero-1920', width: 1920, height: 1080 },
+    { id: 'hero-2560', width: 2560, height: 1440 },
   ],
 };
 
