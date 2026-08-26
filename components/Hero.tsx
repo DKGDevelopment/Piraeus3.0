@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import SequenceCanvas from './SequenceCanvas';
 import Intro from './Intro';
+import Stats from './Stats';
 import { HERO_SEQUENCE } from '@/lib/sequence';
 import { FRAMES_TO_START } from '@/lib/useImageSequence';
 import { lockScroll, unlockScroll } from '@/lib/lenis';
@@ -47,8 +48,9 @@ export default function Hero() {
       >
         <div className="hero__overlay">
           <h1 className="hero__title">
-            A new waterfront<br />for Piraeus
+            A New Entrance<br />to Piraeus
           </h1>
+          {entered && <Stats />}
           <p className="hero__scroll-cue">Scroll to descend</p>
         </div>
       </SequenceCanvas>

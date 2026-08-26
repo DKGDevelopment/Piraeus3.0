@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
+import Link from 'next/link';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -57,6 +58,9 @@ export default function BuildingLabels({ tier, scrollLength, triggerRef }: Props
             x: text.x,
             y: text.y,
             opacity,
+            // A faded callout is still in the layout, so it would otherwise keep
+            // swallowing clicks over the frame.
+            pointerEvents: opacity > 0.6 ? 'auto' : 'none',
             overwrite: 'auto',
           });
           el.line.setAttribute('x1', String(anchor.x));
@@ -96,7 +100,7 @@ export default function BuildingLabels({ tier, scrollLength, triggerRef }: Props
   );
 
   return (
-    <div ref={root} className="labels" aria-hidden="true">
+    <div ref={root} className="labels">
       <svg className="labels__lines">
         {BUILDINGS.map((b) => (
           <line
@@ -112,8 +116,9 @@ export default function BuildingLabels({ tier, scrollLength, triggerRef }: Props
       </svg>
 
       {BUILDINGS.map((b) => (
-        <div
+        <Link
           key={b.id}
+          href={`/assets/${b.id}`}
           className="labels__item"
           ref={(node) => {
             if (!node) return;
@@ -123,7 +128,7 @@ export default function BuildingLabels({ tier, scrollLength, triggerRef }: Props
         >
           <span className="labels__dot" />
           <span className="labels__name">{b.name}</span>
-        </div>
+        </Link>
       ))}
     </div>
   );
