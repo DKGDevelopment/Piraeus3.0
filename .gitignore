@@ -6,3 +6,8 @@ out
 *.tsbuildinfo
 next-env.d.ts
 .DS_Store
+
+# rendered camera-move intermediates
+renders/
+*.mp4
+*.mov
