@@ -212,8 +212,8 @@ body {
 }
 
 .labels__dot {
-  width: 7px;
-  height: 7px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
   background: var(--paper);
   box-shadow: 0 0 0 2px rgba(11, 13, 14, 0.55), 0 0 0 6px rgba(11, 13, 14, 0.28);
@@ -221,7 +221,7 @@ body {
 }
 
 .labels__name {
-  font-size: clamp(0.88rem, 1.35vw, 1.12rem);
+  font-size: clamp(1.05rem, 1.75vw, 1.5rem);
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
