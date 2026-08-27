@@ -1,7 +1,5 @@
 'use client';
 
-import Link from 'next/link';
-
 type Props = {
   name: string;
   standfirst: string;
@@ -40,9 +38,6 @@ export default function AssetVideo({ name, standfirst, src }: Props) {
       </video>
 
       <div className="asset-hero">
-        <Link className="asset-hero__back" href="/">
-          <span aria-hidden="true">&larr;</span> Masterplan
-        </Link>
         <div className="asset-hero__title-block">
           <h1 className="asset-hero__title">{name}</h1>
           <p className="asset-hero__standfirst">{standfirst}</p>
