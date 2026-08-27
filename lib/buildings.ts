@@ -145,3 +145,52 @@ export function groundAnchorAt(s: GroundSpot, p: number) {
     y: s.from.y + (s.to.y - s.from.y) * t,
   };
 }
+
+/**
+ * Markers for a chapter that is not the aerial descent.
+ *
+ * Each carries its own window: in a walking shot a building enters and leaves
+ * frame on its own schedule rather than all of them sharing one stretch, as
+ * they do looking down at the site.
+ */
+export type ChapterSpot = {
+  id: string;
+  from: { x: number; y: number };
+  to: { x: number; y: number };
+  enter: number;
+  exit: number;
+};
+
+export const LANE_SPOTS: ChapterSpot[] = [
+  {
+    id: 'nexus',
+    from: { x: 0.203, y: 0.481 },
+    to: { x: 0.120, y: 0.520 },
+    enter: 0.30,
+    exit: 0.62,
+  },
+  {
+    id: 'gateway',
+    from: { x: 0.527, y: 0.337 },
+    to: { x: 0.439, y: 0.457 },
+    enter: 0.45,
+    exit: 1.0,
+  },
+];
+
+/** Position and opacity of a chapter marker at a given scrub progress. */
+export function spotAt(s: ChapterSpot, p: number) {
+  const span = s.exit - s.enter;
+  const t = Math.min(1, Math.max(0, (p - s.enter) / span));
+  // Fades are a fixed slice of the window, so a short window does not snap.
+  const edge = Math.min(0.06, span * 0.25);
+  const opacity = Math.max(
+    0,
+    Math.min(1, (p - s.enter) / edge, (s.exit - p) / edge)
+  );
+  return {
+    x: s.from.x + (s.to.x - s.from.x) * t,
+    y: s.from.y + (s.to.y - s.from.y) * t,
+    opacity,
+  };
+}
