@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -18,6 +18,11 @@ type Props = {
   onReady?: () => void;
   /** Overlay the asset callouts tethered to their roofs. */
   labels?: boolean;
+  /**
+   * 'eager' downloads immediately; 'near' waits until the chapter is about a
+   * viewport away, so a later chapter does not compete with the one on screen.
+   */
+  preload?: 'eager' | 'near';
   children?: React.ReactNode;
 };
 
@@ -32,13 +37,29 @@ export default function SequenceCanvas({
   onProgress,
   onReady,
   labels = false,
+  preload = 'eager',
   children,
 }: Props) {
+  const [armed, setArmed] = useState(preload === 'eager');
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { frames, progress, ready, tier } = useImageSequence(config);
+  const { frames, progress, ready, tier } = useImageSequence(config, { enabled: armed });
   const frameIndex = useRef({ i: 0 });
   const renderRef = useRef<(() => void) | null>(null);
+
+  useEffect(() => {
+    if (armed || !wrapRef.current) return;
+    const io = new IntersectionObserver(
+      ([entry]) => entry.isIntersecting && setArmed(true),
+      { rootMargin: '100% 0px' }
+    );
+    io.observe(wrapRef.current);
+    return () => io.disconnect();
+  }, [armed]);
+
+  useEffect(() => {
+    if (ready) onReady?.();
+  }, [ready, onReady]);
 
   useEffect(() => {
     onProgress?.(progress);
@@ -49,9 +70,6 @@ export default function SequenceCanvas({
 
   useGSAP(
     () => {
-      if (!ready) return;
-      onReady?.();
-
       const canvas = canvasRef.current!;
       const ctx = canvas.getContext('2d', { alpha: false })!;
       // Frames are cover-fitted, so most viewports scale them slightly. High-
@@ -105,13 +123,15 @@ export default function SequenceCanvas({
         window.removeEventListener('resize', resize);
       };
     },
-    { scope: wrapRef, dependencies: [ready, config.frameCount, scrollLength] }
+    // The pin is created on mount rather than when frames arrive: adding 400vh
+    // of pinned scroll to the page mid-scroll would jolt the reader.
+    { scope: wrapRef, dependencies: [config.frameCount, scrollLength] }
   );
 
   return (
     <div ref={wrapRef} className="sequence">
       <canvas ref={canvasRef} className="sequence__canvas" aria-hidden="true" />
-      {labels && ready && (
+      {labels && ready && tier && (
         <BuildingLabels tier={tier} scrollLength={scrollLength} triggerRef={wrapRef} />
       )}
       {children}

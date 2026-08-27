@@ -1,10 +1,11 @@
 import Hero from '@/components/Hero';
+import StreetChapter from '@/components/StreetChapter';
 
 export default function Page() {
   return (
     <main>
       <Hero />
-      {/* Placeholder for the next step: district-level zoom and hotspots. */}
+      <StreetChapter />
       <section className="placeholder">
         <p>Next chapter</p>
       </section>

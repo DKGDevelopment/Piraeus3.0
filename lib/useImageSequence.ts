@@ -27,7 +27,10 @@ export const FRAMES_TO_START = 20;
  * resolved once on mount: re-picking on resize would restart a large download
  * mid-scroll, and the canvas cover-fit already handles viewport changes.
  */
-export function useImageSequence(cfg: SequenceConfig, concurrency = 8): Loaded {
+export function useImageSequence(
+  cfg: SequenceConfig,
+  { enabled = true, concurrency = 8 }: { enabled?: boolean; concurrency?: number } = {}
+): Loaded {
   const framesRef = useRef<(HTMLImageElement | null)[]>(
     new Array(cfg.frameCount).fill(null)
   );
@@ -37,6 +40,7 @@ export function useImageSequence(cfg: SequenceConfig, concurrency = 8): Loaded {
   const [tier, setTier] = useState<SequenceTier | null>(null);
 
   useEffect(() => {
+    if (!enabled) return;
     let cancelled = false;
     const resolved = pickTier(cfg, window.innerWidth, window.devicePixelRatio || 1);
     setTier(resolved);
@@ -85,7 +89,7 @@ export function useImageSequence(cfg: SequenceConfig, concurrency = 8): Loaded {
     return () => {
       cancelled = true;
     };
-  }, [cfg, concurrency]);
+  }, [cfg, concurrency, enabled]);
 
   return { frames: framesRef.current, progress, ready, complete, tier };
 }
