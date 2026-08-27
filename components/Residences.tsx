@@ -1,27 +1,81 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 import type { Residence } from '@/lib/residences';
 
+/** Bands the incoming image is cut into. More of them reads as a finer sweep
+ *  than a set of sliding panels. */
+const BANDS = 20;
+
 /**
- * A residence type: its gallery on one side, its description and the selected
- * room's area on the other.
+ * A residence type: its gallery on one side, its description and the total area
+ * on the other.
  *
- * Rooms without a render still appear as selectable tiles carrying their name,
- * so the panel is complete before the photography is.
+ * Images change by wipe rather than fade: the incoming shot is cut into
+ * horizontal bands that rise in sequence, so the new room assembles itself over
+ * the old one. A crossfade would just dissolve two interiors into mush — this
+ * keeps both readable throughout.
  */
 export default function Residences({ residence }: { residence: Residence }) {
   const [active, setActive] = useState(0);
+  // What the base layer is showing: the wipe lands on top of it, then becomes it.
+  const [settled, setSettled] = useState(0);
+  const stage = useRef<HTMLDivElement>(null);
+
   const room = residence.rooms[active];
+  const base = residence.rooms[settled];
+  const wiping = active !== settled;
+
+  useGSAP(
+    () => {
+      if (!wiping) return;
+      const bands = gsap.utils.toArray<HTMLElement>('.res__band');
+      gsap.fromTo(
+        bands,
+        { yPercent: 100 },
+        {
+          yPercent: 0,
+          duration: 0.62,
+          ease: 'power3.out',
+          // Halved with twice the bands, so the wipe still lands in about the
+          // same time rather than dragging on.
+          stagger: 0.023,
+          onComplete: () => setSettled(active),
+        }
+      );
+    },
+    { scope: stage, dependencies: [active, wiping] }
+  );
 
   return (
     <div className="res">
-      <div className="res__stage">
-        {room.image ? (
-          <img className="res__shot" src={room.image} alt={room.label} />
+      <div className="res__stage" ref={stage}>
+        {base.image ? (
+          <img className="res__shot" src={base.image} alt={base.label} />
         ) : (
           <div className="res__shot res__shot--empty">
-            <span>{room.label}</span>
+            <span>{base.label}</span>
+          </div>
+        )}
+
+        {wiping && room.image && (
+          <div className="res__wipe" aria-hidden="true">
+            {Array.from({ length: BANDS }, (_, i) => (
+              <span
+                key={i}
+                className="res__band"
+                style={{
+                  top: `${(i * 100) / BANDS}%`,
+                  height: `${100 / BANDS}%`,
+                  backgroundImage: `url(${room.image})`,
+                  // Each band shows its own slice of the same cover-fitted image,
+                  // so together they reassemble one photograph rather than ten.
+                  backgroundPosition: `50% ${(i * 100) / (BANDS - 1)}%`,
+                }}
+              />
+            ))}
           </div>
         )}
 

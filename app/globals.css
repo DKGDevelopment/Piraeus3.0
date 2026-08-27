@@ -638,6 +638,23 @@ body {
 
 .panel__inner { max-width: 46ch; }
 
+/* The claim on one side, the ethos on the other: two columns reading as a
+   spread rather than one column running long. */
+.panel__spread {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(2rem, 7vw, 8rem);
+  align-items: start;
+  width: 100%;
+}
+
+.panel__col { max-width: 42ch; }
+
+/* Held to the right edge of its column so the two blocks bracket the panel. */
+.panel__col--end { justify-self: end; }
+
+.panel__col--end .panel__body:first-child { margin-top: 0; }
+
 /* The Project runs long, so it takes more measure and its own rhythm. */
 .panel__inner--wide { max-width: 62ch; }
 
@@ -797,6 +814,22 @@ body {
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: rgba(11, 13, 14, 0.35);
+}
+
+/* --- band wipe --- */
+.res__wipe {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.res__band {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  will-change: transform;
 }
 
 /* Names the view without covering it, since the figure now speaks for the
