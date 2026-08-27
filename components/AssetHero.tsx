@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import { useCallback, useState } from 'react';
-import SequenceCanvas from './SequenceCanvas';
+import Stage from './Stage';
+import SequenceLayer from './SequenceLayer';
 import { FRAMES_TO_START } from '@/lib/useImageSequence';
 import type { SequenceConfig } from '@/lib/sequence';
 
@@ -38,12 +39,14 @@ export default function AssetHero({ name, standfirst, config }: Props) {
         </span>
       </div>
 
-      <SequenceCanvas
-        config={config}
-        scrollLength={5}
-        onProgress={handleProgress}
-        onReady={handleReady}
-      >
+      <Stage length={5}>
+        <SequenceLayer
+          config={config}
+          offset={0}
+          length={5}
+          onProgress={handleProgress}
+          onReady={handleReady}
+        >
         <div className="asset-hero">
           <Link className="asset-hero__back" href="/">
             <span aria-hidden="true">&larr;</span> Masterplan
@@ -53,7 +56,8 @@ export default function AssetHero({ name, standfirst, config }: Props) {
             <p className="asset-hero__standfirst">{standfirst}</p>
           </div>
         </div>
-      </SequenceCanvas>
+        </SequenceLayer>
+      </Stage>
     </>
   );
 }

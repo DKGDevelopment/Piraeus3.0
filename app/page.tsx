@@ -1,13 +1,9 @@
-import Hero from '@/components/Hero';
-import StreetChapter from '@/components/StreetChapter';
-import LaneChapter from '@/components/LaneChapter';
+import Journey from '@/components/Journey';
 
 export default function Page() {
   return (
     <main>
-      <Hero />
-      <StreetChapter />
-      <LaneChapter />
+      <Journey />
       <section className="placeholder">
         <p>Next chapter</p>
       </section>
