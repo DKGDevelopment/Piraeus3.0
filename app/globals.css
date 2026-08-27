@@ -3,7 +3,8 @@
   --paper: #f4f1ec;
   --rule: rgba(244, 241, 236, 0.24);
   --cream: #e8e1d3;
-  --rail-w: clamp(74px, 7vw, 112px);
+  /* An inch (96px) wider than it began. */
+  --rail-w: clamp(170px, calc(7vw + 96px), 208px);
   --font-display: var(--font-inter), 'Helvetica Neue', system-ui, sans-serif;
 }
 
