@@ -27,9 +27,11 @@ type Props = {
  */
 export default function BuildingLabels({ tier, scrollLength, triggerRef }: Props) {
   const root = useRef<HTMLDivElement>(null);
-  const items = useRef<Map<string, { label: HTMLElement; line: SVGLineElement }>>(
-    new Map()
-  );
+  type Parts = { label?: HTMLElement; line?: SVGLineElement; spot?: HTMLElement };
+  const items = useRef<Map<string, Parts>>(new Map());
+  const put = (id: string, part: Partial<Parts>) => {
+    items.current.set(id, { ...items.current.get(id), ...part });
+  };
 
   useGSAP(
     () => {
@@ -40,7 +42,7 @@ export default function BuildingLabels({ tier, scrollLength, triggerRef }: Props
 
         for (const b of BUILDINGS) {
           const el = items.current.get(b.id);
-          if (!el) continue;
+          if (!el?.label || !el.line || !el.spot) continue;
 
           const a = anchorAt(b, p);
           const anchor = toPx(a.x, a.y);
@@ -55,15 +57,13 @@ export default function BuildingLabels({ tier, scrollLength, triggerRef }: Props
           const fadeOut = gsap.utils.clamp(0, 1, (CALLOUT_WINDOW - p) / 0.05);
           const opacity = inView ? Math.min(fadeIn, fadeOut) : 0;
 
-          gsap.set(el.label, {
-            x: text.x,
-            y: text.y,
-            opacity,
-            // A faded callout is still in the layout, so it would otherwise keep
-            // swallowing clicks over the frame.
-            pointerEvents: opacity > 0.6 ? 'auto' : 'none',
-            overwrite: 'auto',
-          });
+          // A faded callout is still in the layout, so it would otherwise keep
+          // swallowing clicks over the frame.
+          const pointerEvents = opacity > 0.6 ? 'auto' : 'none';
+
+          gsap.set(el.label, { x: text.x, y: text.y, opacity, pointerEvents, overwrite: 'auto' });
+          gsap.set(el.spot, { x: anchor.x, y: anchor.y, opacity, pointerEvents, overwrite: 'auto' });
+
           el.line.setAttribute('x1', String(anchor.x));
           el.line.setAttribute('y1', String(anchor.y));
           el.line.setAttribute('x2', String(text.x));
@@ -108,13 +108,29 @@ export default function BuildingLabels({ tier, scrollLength, triggerRef }: Props
             key={b.id}
             className="labels__line"
             ref={(node) => {
-              if (!node) return;
-              const prev = items.current.get(b.id);
-              items.current.set(b.id, { label: prev?.label as HTMLElement, line: node });
+              if (node) put(b.id, { line: node });
             }}
           />
         ))}
       </svg>
+
+      {/* The marker sits on the building; the name sits at the end of its leader.
+          Both open the asset, so either target works. */}
+      {BUILDINGS.map((b) => (
+        <Link
+          key={`spot-${b.id}`}
+          href={`/assets/${b.id}`}
+          className="hotspot"
+          aria-label={`Explore ${b.name}`}
+          ref={(node) => {
+            if (node) put(b.id, { spot: node });
+          }}
+        >
+          <span className="hotspot__pulse" />
+          <span className="hotspot__ring" />
+          <span className="hotspot__core" />
+        </Link>
+      ))}
 
       {BUILDINGS.map((b) => (
         <Link
@@ -122,12 +138,9 @@ export default function BuildingLabels({ tier, scrollLength, triggerRef }: Props
           href={`/assets/${b.id}`}
           className="labels__item"
           ref={(node) => {
-            if (!node) return;
-            const prev = items.current.get(b.id);
-            items.current.set(b.id, { label: node, line: prev?.line as SVGLineElement });
+            if (node) put(b.id, { label: node });
           }}
         >
-          <span className="labels__dot" />
           <span className="labels__name">{b.name}</span>
         </Link>
       ))}
