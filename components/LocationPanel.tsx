@@ -1,6 +1,8 @@
 type Place = { name: string; note: string };
 
 type Props = {
+  heading: string;
+  copy: string;
   /** Path under /public. Absent until the map artwork is supplied. */
   map?: string;
   places: Place[];
@@ -14,7 +16,7 @@ type Props = {
  * but it costs a third-party script and a key, and buys nothing until the pins
  * carry real content.
  */
-export default function LocationPanel({ map, places }: Props) {
+export default function LocationPanel({ heading, copy, map, places }: Props) {
   return (
     <div className="loc">
       <div className="loc__map">
@@ -29,11 +31,8 @@ export default function LocationPanel({ map, places }: Props) {
 
       <aside className="loc__panel">
         <p className="panel__eyebrow">Location</p>
-        <h2 className="res__name">The Neighbourhood</h2>
-        <p className="res__copy">
-          Set between the port and the coast road, within walking distance of the
-          metro and the waterfront.
-        </p>
+        <h2 className="res__name">{heading}</h2>
+        <p className="res__copy">{copy}</p>
 
         <dl className="loc__list">
           {places.map((p) => (

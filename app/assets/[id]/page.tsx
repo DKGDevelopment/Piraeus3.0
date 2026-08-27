@@ -5,8 +5,8 @@ import AssetVideo from '@/components/AssetVideo';
 import Residences from '@/components/Residences';
 import LocationPanel from '@/components/LocationPanel';
 import Newsletter from '@/components/Newsletter';
-import { SKYBLUE_RESIDENCES } from '@/lib/residences';
 import { BUILDINGS } from '@/lib/buildings';
+import { ASSET_PAGES } from '@/lib/assets';
 
 export function generateStaticParams() {
   return BUILDINGS.map((b) => ({ id: b.id }));
@@ -21,59 +21,10 @@ export default async function AssetPage({
   const building = BUILDINGS.find((b) => b.id === id);
   if (!building) notFound();
 
-  // Skyway is the second worked asset page, using the video shipped in assets-v9.
-  if (id === 'skyway') {
-    return (
-      <main>
-        <AssetShell>
-          <section className="panel panel--film">
-            <AssetVideo
-              name={building.name}
-              standfirst="Residential apartments"
-              src="skyway"
-            />
-          </section>
+  const page = ASSET_PAGES[id];
 
-          <section className="panel panel--text">
-            <div className="panel__spread">
-              <div className="panel__col">
-                <p className="panel__eyebrow">The Project</p>
-                <p className="panel__lead">
-                  Skyway brings a new residential presence to the gateway of
-                  Piraeus, with architecture shaped around light, movement, and
-                  the city beyond.
-                </p>
-                <p className="panel__lead">
-                  A considered address for contemporary urban living, connected
-                  to the port, the coast, and the life of the neighbourhood.
-                </p>
-              </div>
-
-              <div className="panel__col panel__col--end">
-                <p className="panel__body">
-                  At Piraeus Gate, every building is part of a larger urban
-                  story. Skyway is designed to make arrival feel effortless and
-                  everyday life feel more open.
-                </p>
-                <p className="panel__body">
-                  The project combines a confident architectural identity with
-                  the warmth, convenience, and sense of belonging expected from
-                  a new home in Piraeus.
-                </p>
-              </div>
-            </div>
-          </section>
-
-          <section className="panel panel--sub">
-            <Newsletter />
-          </section>
-        </AssetShell>
-      </main>
-    );
-  }
-
-  // The remaining assets follow once their films and project content exist.
-  if (id !== 'skyblue') {
+  // Assets whose film has not been shot yet keep a holding page.
+  if (!page) {
     return (
       <main className="asset">
         <Link className="asset__back" href="/">
@@ -91,8 +42,8 @@ export default async function AssetPage({
         <section className="panel panel--film">
           <AssetVideo
             name={building.name}
-            standfirst="Serviced Apartments"
-            src="skyblue"
+            standfirst={page.standfirst}
+            src={page.film}
           />
         </section>
 
@@ -100,47 +51,39 @@ export default async function AssetPage({
           <div className="panel__spread">
             <div className="panel__col">
               <p className="panel__eyebrow">The Project</p>
-              <p className="panel__lead">
-                The architecture of SkyBlue balances clean contemporary lines
-                with Mediterranean warmth and texture.
-              </p>
-              <p className="panel__lead">
-                Whether you&rsquo;re seeking a serene retreat, cultural hub, or a
-                space that fosters personal growth, SkyBlue offers it all.
-              </p>
+              {page.project.lead.map((line) => (
+                <p className="panel__lead" key={line}>
+                  {line}
+                </p>
+              ))}
             </div>
 
             <div className="panel__col panel__col--end">
-              <p className="panel__body">
-                At Piraeus Gate, we believe that a home is more than a physical
-                space &mdash; it&rsquo;s a reflection of your aspirations,
-                well-being, and values.
-              </p>
-              <p className="panel__body">
-                Our mission is to immerse you in a lifestyle that balances
-                refined aesthetics, architectural excellence, and a profound
-                sense of community.
-              </p>
+              {page.project.body.map((line) => (
+                <p className="panel__body" key={line}>
+                  {line}
+                </p>
+              ))}
             </div>
           </div>
         </section>
 
-        <section className="panel panel--res">
-          <Residences residence={SKYBLUE_RESIDENCES[0]} />
-        </section>
+        {page.residence && (
+          <section className="panel panel--res">
+            <Residences residence={page.residence} />
+          </section>
+        )}
 
-        <section className="panel panel--res">
-          <LocationPanel
-            map="/location/skyblue-map.webp"
-            places={[
-              { name: 'Piraeus port', note: '5 min' },
-              { name: 'Metro, Line 3', note: '7 min on foot' },
-              { name: 'Coast road', note: '3 min on foot' },
-              { name: 'Athens centre', note: '20 min' },
-              { name: 'Airport', note: '45 min' },
-            ]}
-          />
-        </section>
+        {page.location && (
+          <section className="panel panel--res">
+            <LocationPanel
+              heading={page.location.heading}
+              copy={page.location.copy}
+              map={page.location.map}
+              places={page.location.places}
+            />
+          </section>
+        )}
 
         <section className="panel panel--sub">
           <Newsletter />
