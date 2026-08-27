@@ -46,26 +46,31 @@ export default async function AssetPage({
         </section>
 
         <section className="panel panel--text">
-          <div className="panel__inner panel__inner--wide">
-            <p className="panel__eyebrow">The Project</p>
-            <p className="panel__lead">
-              The architecture of SkyBlue balances clean contemporary lines with
-              Mediterranean warmth and texture.
-            </p>
-            <p className="panel__lead">
-              Whether you&rsquo;re seeking a serene retreat, cultural hub, or a
-              space that fosters personal growth, SkyBlue offers it all.
-            </p>
-            <p className="panel__body">
-              At Piraeus Gate, we believe that a home is more than a physical
-              space &mdash; it&rsquo;s a reflection of your aspirations,
-              well-being, and values.
-            </p>
-            <p className="panel__body">
-              Our mission is to immerse you in a lifestyle that balances refined
-              aesthetics, architectural excellence, and a profound sense of
-              community.
-            </p>
+          <div className="panel__spread">
+            <div className="panel__col">
+              <p className="panel__eyebrow">The Project</p>
+              <p className="panel__lead">
+                The architecture of SkyBlue balances clean contemporary lines
+                with Mediterranean warmth and texture.
+              </p>
+              <p className="panel__lead">
+                Whether you&rsquo;re seeking a serene retreat, cultural hub, or a
+                space that fosters personal growth, SkyBlue offers it all.
+              </p>
+            </div>
+
+            <div className="panel__col panel__col--end">
+              <p className="panel__body">
+                At Piraeus Gate, we believe that a home is more than a physical
+                space &mdash; it&rsquo;s a reflection of your aspirations,
+                well-being, and values.
+              </p>
+              <p className="panel__body">
+                Our mission is to immerse you in a lifestyle that balances
+                refined aesthetics, architectural excellence, and a profound
+                sense of community.
+              </p>
+            </div>
           </div>
         </section>
 
@@ -75,6 +80,7 @@ export default async function AssetPage({
 
         <section className="panel panel--res">
           <LocationPanel
+            map="/location/skyblue-map.webp"
             places={[
               { name: 'Piraeus port', note: '5 min' },
               { name: 'Metro, Line 3', note: '7 min on foot' },
