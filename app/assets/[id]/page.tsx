@@ -4,6 +4,7 @@ import AssetShell from '@/components/AssetShell';
 import AssetVideo from '@/components/AssetVideo';
 import Residences from '@/components/Residences';
 import LocationPanel from '@/components/LocationPanel';
+import Newsletter from '@/components/Newsletter';
 import { SKYBLUE_RESIDENCES } from '@/lib/residences';
 import { BUILDINGS } from '@/lib/buildings';
 
@@ -84,12 +85,8 @@ export default async function AssetPage({
           />
         </section>
 
-        <section className="panel panel--text">
-          <div className="panel__inner">
-            <p className="panel__eyebrow">Enquire</p>
-            <p className="panel__lead">Register interest in Skyblue.</p>
-            <p className="panel__note">In preparation.</p>
-          </div>
+        <section className="panel panel--sub">
+          <Newsletter />
         </section>
       </AssetShell>
     </main>
