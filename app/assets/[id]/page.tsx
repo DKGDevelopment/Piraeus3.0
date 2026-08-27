@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation';
 import AssetShell from '@/components/AssetShell';
 import AssetVideo from '@/components/AssetVideo';
 import Residences from '@/components/Residences';
+import LocationPanel from '@/components/LocationPanel';
+import Newsletter from '@/components/Newsletter';
 import { SKYBLUE_RESIDENCES } from '@/lib/residences';
 import { BUILDINGS } from '@/lib/buildings';
 
@@ -71,12 +73,20 @@ export default async function AssetPage({
           <Residences residence={SKYBLUE_RESIDENCES[0]} />
         </section>
 
-        <section className="panel panel--text">
-          <div className="panel__inner">
-            <p className="panel__eyebrow">Enquire</p>
-            <p className="panel__lead">Register interest in Skyblue.</p>
-            <p className="panel__note">In preparation.</p>
-          </div>
+        <section className="panel panel--res">
+          <LocationPanel
+            places={[
+              { name: 'Piraeus port', note: '5 min' },
+              { name: 'Metro, Line 3', note: '7 min on foot' },
+              { name: 'Coast road', note: '3 min on foot' },
+              { name: 'Athens centre', note: '20 min' },
+              { name: 'Airport', note: '45 min' },
+            ]}
+          />
+        </section>
+
+        <section className="panel panel--sub">
+          <Newsletter />
         </section>
       </AssetShell>
     </main>

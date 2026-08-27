@@ -933,3 +933,185 @@ body {
   letter-spacing: 0.06em;
   opacity: 0.55;
 }
+
+/* --- location --- */
+.loc {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(22rem, 28vw, 30rem);
+  height: 100%;
+  padding-left: var(--rail-w);
+}
+
+.loc__map {
+  position: relative;
+  overflow: hidden;
+  background: #ded5c4;
+}
+
+.loc__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.loc__img--empty {
+  display: grid;
+  place-items: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(11, 13, 14, 0.35);
+}
+
+.loc__panel {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(1.75rem, 3vw, 3.25rem);
+  background: var(--cream);
+  border-left: 1px solid rgba(11, 13, 14, 0.14);
+}
+
+.loc__list {
+  margin-top: auto;
+  border-top: 1px solid rgba(11, 13, 14, 0.16);
+}
+
+.loc__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid rgba(11, 13, 14, 0.1);
+}
+
+.loc__place {
+  font-size: clamp(0.85rem, 1vw, 0.98rem);
+  font-weight: 600;
+}
+
+.loc__note {
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.55;
+  white-space: nowrap;
+}
+
+/* --- newsletter coda --- */
+.panel--sub {
+  /* A third of the frame: the deck measures scroll from the track's overflow,
+     so a narrow panel costs proportionally less of the wheel. */
+  width: clamp(24rem, 34vw, 34rem);
+  background: var(--cream);
+  color: var(--ink);
+  border-left: 1px solid rgba(11, 13, 14, 0.14);
+}
+
+.sub {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding: clamp(1.75rem, 2.6vw, 3rem);
+}
+
+.sub__title {
+  font-size: clamp(1.5rem, 2.2vw, 2.1rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+}
+
+.sub__form { margin-top: 2rem; }
+
+.sub__field {
+  display: block;
+  border-bottom: 1px solid rgba(11, 13, 14, 0.3);
+  padding-bottom: 0.45rem;
+  margin-bottom: 1.4rem;
+}
+
+.sub__label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+.sub__field input {
+  width: 100%;
+  margin-top: 0.35rem;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 0.95rem;
+  color: inherit;
+  outline: none;
+}
+
+.sub__field:focus-within { border-bottom-color: var(--ink); }
+
+.sub__send {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.9rem 1.1rem;
+  background: none;
+  border: 1px solid rgba(11, 13, 14, 0.4);
+  color: inherit;
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.sub__send:hover { background: var(--ink); color: var(--cream); }
+
+.sub__chevron { font-size: 1.1rem; line-height: 1; }
+
+.sub__note {
+  margin-top: 0.8rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  opacity: 0.6;
+}
+
+.sub__bottom { font-size: 0.82rem; }
+
+.sub__seo {
+  opacity: 0.45;
+  line-height: 1.7;
+}
+
+.sub__follow {
+  margin-top: 1.2rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  line-height: 1.7;
+  opacity: 0.75;
+}
+
+.sub__mark {
+  width: 8.5rem;
+  height: auto;
+  margin-top: 1.4rem;
+}
+
+.sub__credit {
+  margin-top: 1.4rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(11, 13, 14, 0.18);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  opacity: 0.55;
+}
