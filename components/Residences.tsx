@@ -18,12 +18,14 @@ export default function Residences({ residence }: { residence: Residence }) {
     <div className="res">
       <div className="res__stage">
         {room.image ? (
-          <img className="res__shot" src={room.image} alt={room.caption ?? room.label} />
+          <img className="res__shot" src={room.image} alt={room.label} />
         ) : (
           <div className="res__shot res__shot--empty">
             <span>{room.label}</span>
           </div>
         )}
+
+        <p className="res__now">{room.label}</p>
 
         <div className="res__thumbs" role="tablist" aria-label="Rooms">
           {residence.rooms.map((r, i) => (
@@ -54,13 +56,15 @@ export default function Residences({ residence }: { residence: Residence }) {
           Book a visit
         </a>
 
+        {/* One figure for the residence, not per room: the area given is the
+            whole apartment, and inventing a breakdown would be fiction. */}
         <div className="res__figure">
-          <p className="res__room">{room.label}</p>
+          <p className="res__room">Total area</p>
           <p className="res__area">
-            <span className="res__number">{room.area.toLocaleString('en-US')}</span>
-            <span className="res__unit">{room.unit}</span>
+            <span className="res__number">{residence.area.toLocaleString('en-US')}</span>
+            <span className="res__unit">{residence.unit}</span>
           </p>
-          <p className="res__caption">total {room.label.toLowerCase()} area</p>
+          <p className="res__caption">total interior area</p>
         </div>
       </aside>
     </div>

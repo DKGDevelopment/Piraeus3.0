@@ -797,6 +797,21 @@ body {
   color: rgba(11, 13, 14, 0.35);
 }
 
+/* Names the view without covering it, since the figure now speaks for the
+   whole residence rather than the room on screen. */
+.res__now {
+  position: absolute;
+  left: clamp(1rem, 2vw, 2rem);
+  bottom: clamp(1rem, 2.5vw, 2rem);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  /* Over a render rather than the cream, so it needs its own contrast. */
+  color: var(--paper);
+  text-shadow: 0 1px 2px rgba(11, 13, 14, 0.75), 0 2px 14px rgba(11, 13, 14, 0.6);
+}
+
 .res__thumbs {
   position: absolute;
   left: 50%;

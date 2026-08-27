@@ -7,14 +7,10 @@
  */
 export type Room = {
   id: string;
-  /** Shown above the figure, e.g. "Bedroom". */
+  /** Names the view, e.g. "Bedroom". */
   label: string;
-  /** Numeric so it can be formatted and totalled rather than parsed. */
-  area: number;
-  unit: string;
   /** Path under /public. Absent until the render exists. */
   image?: string;
-  caption?: string;
 };
 
 export type Residence = {
@@ -22,22 +18,30 @@ export type Residence = {
   /** The residence's own name, e.g. "Lumière Duplex Residences". */
   name: string;
   description: string;
+  /** Numeric so it can be formatted rather than parsed back out. */
+  area: number;
+  unit: string;
   rooms: Room[];
 };
 
-/** Placeholder until the real types, areas and renders are supplied. */
+/**
+ * Room labels are read from the renders themselves; the description is still
+ * placeholder. The area is the supplied figure for the whole residence.
+ */
 export const SKYBLUE_RESIDENCES: Residence[] = [
   {
-    id: 'duplex',
-    name: 'Duplex Residences',
+    id: 'skyblue',
+    name: 'Skyblue Residences',
     description:
-      'Two-storey residences arranged around a double-height living space, with private terraces to the south and a mix of one, two and three bedroom layouts.',
+      'Residences arranged around a generous living space, with private terraces and a mix of layouts across the two towers.',
+    area: 147,
+    unit: 'm²',
     rooms: [
-      { id: 'bedroom', label: 'Bedroom', area: 240, unit: 'sq. ft.' },
-      { id: 'living', label: 'Living', area: 410, unit: 'sq. ft.' },
-      { id: 'kitchen', label: 'Kitchen', area: 180, unit: 'sq. ft.' },
-      { id: 'terrace', label: 'Terrace', area: 320, unit: 'sq. ft.' },
-      { id: 'plan', label: 'Floor plan', area: 1150, unit: 'sq. ft.' },
+      { id: 'bedroom', label: 'Bedroom', image: '/residences/skyblue-1.webp' },
+      { id: 'living', label: 'Living', image: '/residences/skyblue-2.webp' },
+      { id: 'lounge', label: 'Lounge', image: '/residences/skyblue-3.webp' },
+      { id: 'study', label: 'Study', image: '/residences/skyblue-4.webp' },
+      { id: 'dining', label: 'Dining', image: '/residences/skyblue-5.webp' },
     ],
   },
 ];
