@@ -49,6 +49,17 @@ export function framePath(tier: SequenceTier, ext: string, index: number): strin
   return `/sequence/${tier.id}/${tier.id}_${n}.${ext}`;
 }
 
+/** Chapter two: the street, continuing from where the descent lands. */
+export const STREET_SEQUENCE: SequenceConfig = {
+  frameCount: 100,
+  ext: 'webp',
+  tiers: [
+    { id: 'street-1080', width: 1080, height: 608 },
+    { id: 'street-1920', width: 1920, height: 1080 },
+    { id: 'street-2560', width: 2560, height: 1440 },
+  ],
+};
+
 /** Skyblue: a street-level approach along the facade to the entrance. */
 export const SKYBLUE_SEQUENCE: SequenceConfig = {
   frameCount: 112,
