@@ -60,6 +60,17 @@ export const STREET_SEQUENCE: SequenceConfig = {
   ],
 };
 
+/** Chapter three: the pedestrian lane between the blocks. */
+export const LANE_SEQUENCE: SequenceConfig = {
+  frameCount: 100,
+  ext: 'webp',
+  tiers: [
+    { id: 'lane-1080', width: 1080, height: 608 },
+    { id: 'lane-1920', width: 1920, height: 1080 },
+    { id: 'lane-2560', width: 2560, height: 1440 },
+  ],
+};
+
 /** Skyblue: a street-level approach along the facade to the entrance. */
 export const SKYBLUE_SEQUENCE: SequenceConfig = {
   frameCount: 112,
