@@ -2,6 +2,8 @@
   --ink: #0b0d0e;
   --paper: #f4f1ec;
   --rule: rgba(244, 241, 236, 0.24);
+  --cream: #e8e1d3;
+  --rail-w: clamp(74px, 7vw, 112px);
   --font-display: var(--font-inter), 'Helvetica Neue', system-ui, sans-serif;
 }
 
@@ -591,4 +593,151 @@ body {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+}
+
+/* --- sideways deck --- */
+.deck {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  background: var(--ink);
+}
+
+.deck__track {
+  display: flex;
+  height: 100%;
+  width: max-content;
+  will-change: transform;
+}
+
+.panel {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  flex: none;
+}
+
+.panel--text {
+  display: flex;
+  align-items: center;
+  background: var(--cream);
+  color: var(--ink);
+  /* Clears the rail, which sits over every panel. */
+  padding-left: calc(var(--rail-w) + clamp(1.5rem, 5vw, 6rem));
+  padding-right: clamp(1.5rem, 8vw, 10rem);
+}
+
+.panel__inner { max-width: 46ch; }
+
+.panel__eyebrow {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+.panel__lead {
+  margin-top: 1.5rem;
+  font-size: clamp(1.4rem, 2.6vw, 2.4rem);
+  font-weight: 300;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.panel__note {
+  margin-top: 1.25rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.45;
+}
+
+/* --- fixed rail --- */
+.rail {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 60;
+  width: var(--rail-w);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: clamp(1rem, 2vw, 1.75rem) 0;
+  color: var(--paper);
+  /* Transparent over the opening film, filled once the deck moves. */
+  background: transparent;
+  border-right: 1px solid transparent;
+  transition: background 0.5s ease, color 0.5s ease, border-color 0.5s ease;
+}
+
+.rail--filled {
+  background: var(--cream);
+  color: var(--ink);
+  border-right-color: rgba(11, 13, 14, 0.12);
+}
+
+.rail__top,
+.rail__bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.rail__menu,
+.rail__enquire {
+  font: inherit;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: inherit;
+  background: none;
+  border: 0;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.rail__enquire {
+  border: 1px solid currentColor;
+  padding: 0.5rem 0.6rem;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.rail__enquire:hover {
+  background: currentColor;
+}
+
+.rail--filled .rail__enquire:hover { color: var(--cream); }
+.rail:not(.rail--filled) .rail__enquire:hover { color: var(--ink); }
+
+.rail__home { color: inherit; }
+
+.rail__icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  padding: 4px;
+  border: 1px solid currentColor;
+}
+
+.rail__mark {
+  width: calc(var(--rail-w) * 0.62);
+  height: auto;
+  /* One black source asset, tinted to whichever ground the rail is on. */
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+  transition: filter 0.5s ease;
+}
+
+.rail--filled .rail__mark { filter: brightness(0) invert(0); }
+
+/* The film sits under the rail, so its own furniture clears it too. */
+.panel--film .asset-hero {
+  padding-left: calc(var(--rail-w) + clamp(1rem, 2vw, 2rem));
 }
