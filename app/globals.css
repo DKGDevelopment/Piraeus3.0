@@ -382,3 +382,99 @@ body {
   letter-spacing: 0.08em;
   opacity: 0.55;
 }
+
+/* --- asset approach --- */
+.veil {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  background: var(--ink);
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+.veil--gone {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.veil__name {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+.veil__track {
+  width: min(14rem, 50vw);
+  height: 1px;
+  background: rgba(244, 241, 236, 0.28);
+  overflow: hidden;
+}
+
+.veil__fill {
+  display: block;
+  height: 100%;
+  background: var(--paper);
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: transform 0.4s ease;
+}
+
+.asset-hero {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(1.25rem, 3vw, 3rem);
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(11, 13, 14, 0.6), transparent 45%),
+    linear-gradient(to bottom, rgba(11, 13, 14, 0.45), transparent 30%);
+  text-shadow: 0 1px 2px rgba(11, 13, 14, 0.8), 0 2px 18px rgba(11, 13, 14, 0.7);
+}
+
+.asset-hero__back {
+  align-self: flex-start;
+  pointer-events: auto;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--paper);
+  text-decoration: none;
+  opacity: 0.75;
+  transition: opacity 0.3s ease;
+}
+
+.asset-hero__back:hover { opacity: 1; }
+
+.asset-hero__title {
+  font-size: clamp(2.2rem, 6vw, 5rem);
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  line-height: 1.02;
+}
+
+.asset-hero__standfirst {
+  margin-top: 0.9rem;
+  max-width: 32ch;
+  font-size: clamp(0.85rem, 1.1vw, 1rem);
+  letter-spacing: 0.02em;
+  opacity: 0.85;
+}
+
+.asset-next {
+  min-height: 60vh;
+  display: grid;
+  place-items: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  opacity: 0.4;
+}

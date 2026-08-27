@@ -48,3 +48,14 @@ export function framePath(tier: SequenceTier, ext: string, index: number): strin
   const n = String(index + 1).padStart(4, '0');
   return `/sequence/${tier.id}/${tier.id}_${n}.${ext}`;
 }
+
+/** Skyblue: a street-level approach along the facade to the entrance. */
+export const SKYBLUE_SEQUENCE: SequenceConfig = {
+  frameCount: 112,
+  ext: 'webp',
+  tiers: [
+    { id: 'skyblue-1080', width: 1080, height: 806 },
+    { id: 'skyblue-1920', width: 1920, height: 1432 },
+    { id: 'skyblue-2560', width: 2560, height: 1908 },
+  ],
+};
