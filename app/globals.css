@@ -499,10 +499,12 @@ body {
 }
 
 .asset-hero__standfirst {
+  /* A short line under the title now, not a sentence: set as a label. */
   margin-top: 0.9rem;
-  max-width: 32ch;
-  font-size: clamp(0.85rem, 1.1vw, 1rem);
-  letter-spacing: 0.02em;
+  font-size: clamp(0.72rem, 0.95vw, 0.88rem);
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
   opacity: 0.85;
 }
 

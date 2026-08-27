@@ -38,7 +38,7 @@ export default async function AssetPage({
         <section className="panel panel--film">
           <AssetVideo
             name={building.name}
-            standfirst="Twin residential towers at the heart of the development."
+            standfirst="Serviced Apartments"
             src="skyblue"
           />
         </section>
