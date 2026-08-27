@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import AssetShell from '@/components/AssetShell';
 import AssetVideo from '@/components/AssetVideo';
+import Residences from '@/components/Residences';
+import { SKYBLUE_RESIDENCES } from '@/lib/residences';
 import { BUILDINGS } from '@/lib/buildings';
 
 export function generateStaticParams() {
@@ -65,14 +67,8 @@ export default async function AssetPage({
           </div>
         </section>
 
-        <section className="panel panel--text">
-          <div className="panel__inner">
-            <p className="panel__eyebrow">Residences</p>
-            <p className="panel__lead">
-              Apartment mix, floor plans and availability.
-            </p>
-            <p className="panel__note">In preparation.</p>
-          </div>
+        <section className="panel panel--res">
+          <Residences residence={SKYBLUE_RESIDENCES[0]} />
         </section>
 
         <section className="panel panel--text">
