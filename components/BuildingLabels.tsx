@@ -20,9 +20,8 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 type Props = {
   tier: SequenceTier | null;
-  scrollLength: number;
-  /** Element the sequence pins on, so both read the same scroll range. */
-  triggerRef: React.RefObject<HTMLDivElement | null>;
+  /** Scrub feed from the sequence, so both read exactly the same progress. */
+  subscribe: (fn: (p: number) => void) => () => void;
 };
 
 /**
@@ -33,7 +32,7 @@ type Props = {
  * and re-rendering seven components at that rate would cost more than the
  * canvas draw itself.
  */
-export default function BuildingLabels({ tier, scrollLength, triggerRef }: Props) {
+export default function BuildingLabels({ tier, subscribe }: Props) {
   const root = useRef<HTMLDivElement>(null);
   type Parts = { label?: HTMLElement; line?: SVGLineElement; spot?: HTMLElement };
   const ground = useRef<Map<string, HTMLElement>>(new Map());
@@ -100,28 +99,28 @@ export default function BuildingLabels({ tier, scrollLength, triggerRef }: Props
       // headline clears as the first callout arrives.
       const title = document.querySelector('.hero__overlay');
 
-      const st = ScrollTrigger.create({
-        trigger: triggerRef.current,
-        start: 'top top',
-        end: `+=${scrollLength * 100}%`,
-        scrub: 0.6,
-        onUpdate: (self) => {
-          place(self.progress);
-          if (title) {
-            gsap.set(title, {
-              opacity: gsap.utils.clamp(0, 1, 1 - (self.progress - 0.04) / 0.06),
-            });
-          }
-        },
-      });
+      let last = 0;
+      const onScrub = (p: number) => {
+        last = p;
+        place(p);
+        if (title) {
+          gsap.set(title, {
+            opacity: gsap.utils.clamp(0, 1, 1 - (p - 0.04) / 0.06),
+          });
+        }
+      };
 
-      const onResize = () => place(st.progress);
+      const unsubscribe = subscribe(onScrub);
+      const onResize = () => place(last);
       window.addEventListener('resize', onResize);
       place(0);
 
-      return () => window.removeEventListener('resize', onResize);
+      return () => {
+        unsubscribe();
+        window.removeEventListener('resize', onResize);
+      };
     },
-    { scope: root, dependencies: [tier, scrollLength] }
+    { scope: root, dependencies: [tier, subscribe] }
   );
 
   return (
