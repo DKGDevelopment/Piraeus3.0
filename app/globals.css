@@ -933,3 +933,69 @@ body {
   letter-spacing: 0.06em;
   opacity: 0.55;
 }
+
+/* --- location --- */
+.loc {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(22rem, 28vw, 30rem);
+  height: 100%;
+  padding-left: var(--rail-w);
+}
+
+.loc__map {
+  position: relative;
+  overflow: hidden;
+  background: #ded5c4;
+}
+
+.loc__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.loc__img--empty {
+  display: grid;
+  place-items: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(11, 13, 14, 0.35);
+}
+
+.loc__panel {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(1.75rem, 3vw, 3.25rem);
+  background: var(--cream);
+  border-left: 1px solid rgba(11, 13, 14, 0.14);
+}
+
+.loc__list {
+  margin-top: auto;
+  border-top: 1px solid rgba(11, 13, 14, 0.16);
+}
+
+.loc__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid rgba(11, 13, 14, 0.1);
+}
+
+.loc__place {
+  font-size: clamp(0.85rem, 1vw, 0.98rem);
+  font-weight: 600;
+}
+
+.loc__note {
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.55;
+  white-space: nowrap;
+}

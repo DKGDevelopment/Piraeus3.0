@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import AssetShell from '@/components/AssetShell';
 import AssetVideo from '@/components/AssetVideo';
 import Residences from '@/components/Residences';
+import LocationPanel from '@/components/LocationPanel';
 import { SKYBLUE_RESIDENCES } from '@/lib/residences';
 import { BUILDINGS } from '@/lib/buildings';
 
@@ -69,6 +70,18 @@ export default async function AssetPage({
 
         <section className="panel panel--res">
           <Residences residence={SKYBLUE_RESIDENCES[0]} />
+        </section>
+
+        <section className="panel panel--res">
+          <LocationPanel
+            places={[
+              { name: 'Piraeus port', note: '5 min' },
+              { name: 'Metro, Line 3', note: '7 min on foot' },
+              { name: 'Coast road', note: '3 min on foot' },
+              { name: 'Athens centre', note: '20 min' },
+              { name: 'Airport', note: '45 min' },
+            ]}
+          />
         </section>
 
         <section className="panel panel--text">
