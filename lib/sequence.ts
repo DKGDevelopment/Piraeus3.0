@@ -60,7 +60,18 @@ export const STREET_SEQUENCE: SequenceConfig = {
   ],
 };
 
-/** Chapter three: the pedestrian lane between the blocks. */
+/** Chapter three: the courtyard between the blocks. */
+export const COURT_SEQUENCE: SequenceConfig = {
+  frameCount: 90,
+  ext: 'webp',
+  tiers: [
+    { id: 'court-1080', width: 1080, height: 608 },
+    { id: 'court-1920', width: 1920, height: 1080 },
+    { id: 'court-2560', width: 2560, height: 1440 },
+  ],
+};
+
+/** Chapter four: the pedestrian lane between the blocks. */
 export const LANE_SEQUENCE: SequenceConfig = {
   frameCount: 100,
   ext: 'webp',
