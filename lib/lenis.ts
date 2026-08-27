@@ -27,3 +27,9 @@ export function scrollToY(top: number, duration = 1.6) {
   if (instance) instance.scrollTo(top, { duration });
   else window.scrollTo({ top, behavior: 'smooth' });
 }
+
+/** Jumps without animating — for a cut the viewer should not see travelling. */
+export function jumpToY(top: number) {
+  if (instance) instance.scrollTo(top, { immediate: true });
+  else window.scrollTo(0, top);
+}

@@ -1,6 +1,9 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
 import Stage from './Stage';
 import SequenceLayer from './SequenceLayer';
 import Intro from './Intro';
@@ -16,7 +19,9 @@ import {
 } from '@/lib/sequence';
 import { COURT_SPOTS, LANE_SPOTS } from '@/lib/buildings';
 import { FRAMES_TO_START } from '@/lib/useImageSequence';
-import { lockScroll, unlockScroll } from '@/lib/lenis';
+import { jumpToY, lockScroll, unlockScroll } from '@/lib/lenis';
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 /**
  * The homepage journey: the descent, the street it lands on, the courtyard
@@ -44,6 +49,32 @@ export default function Journey() {
   const handleProgress = useCallback((p: number) => setProgress(p), []);
   const handleReady = useCallback(() => setReady(true), []);
   const handleEnter = useCallback(() => setEntered(true), []);
+
+  const tail = useRef<HTMLDivElement>(null);
+  const veil = useRef<HTMLDivElement>(null);
+
+  // Past the last chapter the journey returns to the aerial rather than running
+  // out onto empty page. The stage starts at the top of the document, so the
+  // return is a jump to zero — taken behind a brief blackout, because the cut
+  // from the courtyard back to the aerial is the one moment in the journey that
+  // is not a continuous move.
+  useGSAP(() => {
+    const st = ScrollTrigger.create({
+      trigger: tail.current,
+      start: 'top 55%',
+      onEnter: () => {
+        gsap
+          .timeline()
+          .to(veil.current, { autoAlpha: 1, duration: 0.32, ease: 'power2.in' })
+          .add(() => {
+            jumpToY(0);
+            ScrollTrigger.update();
+          })
+          .to(veil.current, { autoAlpha: 0, duration: 0.55, ease: 'power2.out' }, '+=0.08');
+      },
+    });
+    return () => st.kill();
+  }, []);
 
   useEffect(() => {
     if (entered) unlockScroll();
@@ -97,6 +128,10 @@ export default function Journey() {
           <ChapterSpots spots={LANE_SPOTS} />
         </SequenceLayer>
       </Stage>
+
+      {/* Scroll room past the stage: entering it is what asks for the loop. */}
+      <div ref={tail} className="loop-tail" aria-hidden="true" />
+      <div ref={veil} className="loop-veil" aria-hidden="true" />
     </>
   );
 }
