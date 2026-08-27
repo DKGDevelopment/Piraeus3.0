@@ -194,3 +194,20 @@ export function spotAt(s: ChapterSpot, p: number) {
     opacity,
   };
 }
+
+export const COURT_SPOTS: ChapterSpot[] = [
+  {
+    id: 'gateway',
+    from: { x: 0.595, y: 0.457 },
+    to: { x: 0.649, y: 0.505 },
+    enter: 0.15,
+    exit: 1.0,
+  },
+  {
+    id: 'urban',
+    from: { x: 0.203, y: 0.841 },
+    to: { x: 0.304, y: 0.697 },
+    enter: 0.25,
+    exit: 1.0,
+  },
+];
