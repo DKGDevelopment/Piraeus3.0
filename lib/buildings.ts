@@ -196,18 +196,36 @@ export function spotAt(s: ChapterSpot, p: number) {
 }
 
 export const COURT_SPOTS: ChapterSpot[] = [
+  // Anchors are read off the reference frame near the start of the chapter and
+  // projected to the last frame through the sequence's own expansion, so each
+  // stays on its building as the camera closes in. Two of them leave frame on
+  // the way, and their windows end where they do.
+  {
+    id: 'nexus',
+    from: { x: 0.468, y: 0.715 },
+    to: { x: 0.418, y: 0.989 },
+    enter: 0.08,
+    exit: 0.45,
+  },
+  {
+    id: 'urban',
+    from: { x: 0.470, y: 0.454 },
+    to: { x: 0.340, y: 0.671 },
+    enter: 0.12,
+    exit: 1.0,
+  },
   {
     id: 'gateway',
-    from: { x: 0.595, y: 0.457 },
-    to: { x: 0.649, y: 0.505 },
+    from: { x: 0.626, y: 0.400 },
+    to: { x: 0.625, y: 0.495 },
     enter: 0.15,
     exit: 1.0,
   },
   {
-    id: 'urban',
-    from: { x: 0.203, y: 0.841 },
-    to: { x: 0.304, y: 0.697 },
-    enter: 0.25,
-    exit: 1.0,
+    id: 'skyblue',
+    from: { x: 0.808, y: 0.375 },
+    to: { x: 1.009, y: 0.398 },
+    enter: 0.10,
+    exit: 0.45,
   },
 ];
