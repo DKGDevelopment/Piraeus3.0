@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useContext, useRef } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { SequenceScrub } from './SequenceCanvas';
+import { SequenceScrub } from '@/lib/stage';
 import { BUILDINGS, coverFit, spotAt, type ChapterSpot } from '@/lib/buildings';
 
 /**

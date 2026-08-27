@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useContext, useRef } from 'react';
 import Link from 'next/link';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -14,15 +14,9 @@ import {
   coverFit,
   groundAnchorAt,
 } from '@/lib/buildings';
-import type { SequenceTier } from '@/lib/sequence';
+import { SequenceScrub } from '@/lib/stage';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
-
-type Props = {
-  tier: SequenceTier | null;
-  /** Scrub feed from the sequence, so both read exactly the same progress. */
-  subscribe: (fn: (p: number) => void) => () => void;
-};
 
 /**
  * Callouts naming each asset, tethered to their roofs by a dotted leader.
@@ -32,7 +26,9 @@ type Props = {
  * and re-rendering seven components at that rate would cost more than the
  * canvas draw itself.
  */
-export default function BuildingLabels({ tier, subscribe }: Props) {
+export default function BuildingLabels() {
+  const ctx = useContext(SequenceScrub);
+  const tier = ctx?.tier ?? null;
   const root = useRef<HTMLDivElement>(null);
   type Parts = { label?: HTMLElement; line?: SVGLineElement; spot?: HTMLElement };
   const ground = useRef<Map<string, HTMLElement>>(new Map());
@@ -43,7 +39,7 @@ export default function BuildingLabels({ tier, subscribe }: Props) {
 
   useGSAP(
     () => {
-      if (!tier) return;
+      if (!tier || !ctx) return;
 
       const place = (p: number) => {
         const toPx = coverFit(tier.width, tier.height, window.innerWidth, window.innerHeight);
@@ -110,7 +106,7 @@ export default function BuildingLabels({ tier, subscribe }: Props) {
         }
       };
 
-      const unsubscribe = subscribe(onScrub);
+      const unsubscribe = ctx!.subscribe(onScrub);
       const onResize = () => place(last);
       window.addEventListener('resize', onResize);
 
@@ -119,7 +115,7 @@ export default function BuildingLabels({ tier, subscribe }: Props) {
         window.removeEventListener('resize', onResize);
       };
     },
-    { scope: root, dependencies: [tier, subscribe] }
+    { scope: root, dependencies: [ctx] }
   );
 
   return (

@@ -17,14 +17,22 @@ body {
 }
 
 /* --- sequence stage --- */
-.sequence {
+.stage {
   position: relative;
   height: 100vh;
   width: 100%;
   overflow: hidden;
+  background: var(--ink);
 }
 
-.sequence__canvas {
+/* Chapters are stacked and swapped in place, so the stage never unpins between
+   two shots that are meant to read as one move. */
+.layer {
+  position: absolute;
+  inset: 0;
+}
+
+.layer__canvas {
   position: absolute;
   inset: 0;
   display: block;

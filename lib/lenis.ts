@@ -22,8 +22,8 @@ export function unlockScroll() {
   instance?.start();
 }
 
-/** Smooth-scrolls to an element, falling back to native when Lenis is off. */
-export function scrollToEl(el: Element, duration = 1.6) {
-  if (instance) instance.scrollTo(el as HTMLElement, { duration });
-  else el.scrollIntoView({ behavior: 'smooth' });
+/** Smooth-scrolls to a document position, falling back to native. */
+export function scrollToY(top: number, duration = 1.6) {
+  if (instance) instance.scrollTo(top, { duration });
+  else window.scrollTo({ top, behavior: 'smooth' });
 }

@@ -3,14 +3,14 @@
 import { useContext, useRef } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { SequenceScrub } from './SequenceCanvas';
+import { SequenceScrub, StageScrub } from '@/lib/stage';
 import { coverFit } from '@/lib/buildings';
-import { scrollToEl } from '@/lib/lenis';
+
 
 type Props = {
   label: string;
-  /** Element id of the chapter this turns into. */
-  target: string;
+  /** Playhead offset of the chapter this turns into, in viewport heights. */
+  target: number;
   /** Anchor in frame space, at the cue's entry and at the last frame. */
   from: { x: number; y: number };
   to: { x: number; y: number };
@@ -26,6 +26,7 @@ type Props = {
  */
 export default function TurnCue({ label, target, from, to, enter }: Props) {
   const ctx = useContext(SequenceScrub);
+  const stage = useContext(StageScrub);
   const root = useRef<HTMLButtonElement>(null);
 
   useGSAP(
@@ -64,10 +65,7 @@ export default function TurnCue({ label, target, from, to, enter }: Props) {
     { dependencies: [ctx] }
   );
 
-  const go = () => {
-    const el = document.getElementById(target);
-    if (el) scrollToEl(el);
-  };
+  const go = () => stage?.goTo(target);
 
   return (
     <button ref={root} type="button" className="turn" onClick={go} aria-label={label}>
