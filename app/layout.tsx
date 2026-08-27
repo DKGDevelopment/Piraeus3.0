@@ -7,7 +7,7 @@ import './globals.css';
 // than whatever the platform substitutes for a bold system font.
 const inter = Inter({
   subsets: ['latin'],
-  weight: ['300', '400', '600', '800'],
+  weight: ['300', '400', '600', '800', '900'],
   display: 'swap',
   variable: '--font-inter',
 });
