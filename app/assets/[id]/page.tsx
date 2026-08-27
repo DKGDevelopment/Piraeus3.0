@@ -21,7 +21,58 @@ export default async function AssetPage({
   const building = BUILDINGS.find((b) => b.id === id);
   if (!building) notFound();
 
-  // Skyblue is the worked example: the rest follow once their films exist.
+  // Skyway is the second worked asset page, using the video shipped in assets-v9.
+  if (id === 'skyway') {
+    return (
+      <main>
+        <AssetShell>
+          <section className="panel panel--film">
+            <AssetVideo
+              name={building.name}
+              standfirst="Residential apartments"
+              src="skyway"
+            />
+          </section>
+
+          <section className="panel panel--text">
+            <div className="panel__spread">
+              <div className="panel__col">
+                <p className="panel__eyebrow">The Project</p>
+                <p className="panel__lead">
+                  Skyway brings a new residential presence to the gateway of
+                  Piraeus, with architecture shaped around light, movement, and
+                  the city beyond.
+                </p>
+                <p className="panel__lead">
+                  A considered address for contemporary urban living, connected
+                  to the port, the coast, and the life of the neighbourhood.
+                </p>
+              </div>
+
+              <div className="panel__col panel__col--end">
+                <p className="panel__body">
+                  At Piraeus Gate, every building is part of a larger urban
+                  story. Skyway is designed to make arrival feel effortless and
+                  everyday life feel more open.
+                </p>
+                <p className="panel__body">
+                  The project combines a confident architectural identity with
+                  the warmth, convenience, and sense of belonging expected from
+                  a new home in Piraeus.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section className="panel panel--sub">
+            <Newsletter />
+          </section>
+        </AssetShell>
+      </main>
+    );
+  }
+
+  // The remaining assets follow once their films and project content exist.
   if (id !== 'skyblue') {
     return (
       <main className="asset">
