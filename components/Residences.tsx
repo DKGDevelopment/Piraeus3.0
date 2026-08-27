@@ -5,9 +5,9 @@ import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import type { Residence } from '@/lib/residences';
 
-/** Bands the incoming image is cut into. Enough to read as a sweep, few enough
- *  that each still carries a legible slice of the room. */
-const BANDS = 10;
+/** Bands the incoming image is cut into. More of them reads as a finer sweep
+ *  than a set of sliding panels. */
+const BANDS = 20;
 
 /**
  * A residence type: its gallery on one side, its description and the total area
@@ -39,7 +39,9 @@ export default function Residences({ residence }: { residence: Residence }) {
           yPercent: 0,
           duration: 0.62,
           ease: 'power3.out',
-          stagger: 0.045,
+          // Halved with twice the bands, so the wipe still lands in about the
+          // same time rather than dragging on.
+          stagger: 0.023,
           onComplete: () => setSettled(active),
         }
       );
