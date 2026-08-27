@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import AssetHero from '@/components/AssetHero';
+import AssetVideo from '@/components/AssetVideo';
 import { BUILDINGS } from '@/lib/buildings';
-import { SKYBLUE_SEQUENCE } from '@/lib/sequence';
+
 
 export function generateStaticParams() {
   return BUILDINGS.map((b) => ({ id: b.id }));
@@ -32,10 +32,10 @@ export default async function AssetPage({
 
   return (
     <main>
-      <AssetHero
+      <AssetVideo
         name={building.name}
         standfirst="Twin residential towers at the heart of the development."
-        config={SKYBLUE_SEQUENCE}
+        src="skyblue"
       />
       <section className="asset-next">
         <p>Specifications, plans and availability</p>
