@@ -5,7 +5,15 @@ import Link from 'next/link';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { BUILDINGS, CALLOUT_WINDOW, anchorAt, coverFit } from '@/lib/buildings';
+import {
+  BUILDINGS,
+  CALLOUT_WINDOW,
+  GROUND_SPOTS,
+  GROUND_START,
+  anchorAt,
+  coverFit,
+  groundAnchorAt,
+} from '@/lib/buildings';
 import type { SequenceTier } from '@/lib/sequence';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -28,6 +36,7 @@ type Props = {
 export default function BuildingLabels({ tier, scrollLength, triggerRef }: Props) {
   const root = useRef<HTMLDivElement>(null);
   type Parts = { label?: HTMLElement; line?: SVGLineElement; spot?: HTMLElement };
+  const ground = useRef<Map<string, HTMLElement>>(new Map());
   const items = useRef<Map<string, Parts>>(new Map());
   const put = (id: string, part: Partial<Parts>) => {
     items.current.set(id, { ...items.current.get(id), ...part });
@@ -69,6 +78,21 @@ export default function BuildingLabels({ tier, scrollLength, triggerRef }: Props
           el.line.setAttribute('x2', String(text.x));
           el.line.setAttribute('y2', String(text.y));
           el.line.style.opacity = String(opacity);
+        }
+
+        for (const g of GROUND_SPOTS) {
+          const node = ground.current.get(g.id);
+          if (!node) continue;
+          const a = groundAnchorAt(g, p);
+          const at = toPx(a.x, a.y);
+          const opacity = gsap.utils.clamp(0, 1, (p - (GROUND_START + 0.02)) / 0.05);
+          gsap.set(node, {
+            x: at.x,
+            y: at.y,
+            opacity,
+            pointerEvents: opacity > 0.6 ? 'auto' : 'none',
+            overwrite: 'auto',
+          });
         }
       };
 
@@ -116,6 +140,23 @@ export default function BuildingLabels({ tier, scrollLength, triggerRef }: Props
 
       {/* The marker sits on the building; the name sits at the end of its leader.
           Both open the asset, so either target works. */}
+      {/* The street-level arrival: markers only, no names. */}
+      {GROUND_SPOTS.map((g) => (
+        <Link
+          key={`ground-${g.id}`}
+          href={`/assets/${g.id}`}
+          className="hotspot"
+          aria-label={`Explore ${BUILDINGS.find((b) => b.id === g.id)?.name ?? g.id}`}
+          ref={(node) => {
+            if (node) ground.current.set(g.id, node);
+          }}
+        >
+          <span className="hotspot__pulse" />
+          <span className="hotspot__ring" />
+          <span className="hotspot__core" />
+        </Link>
+      ))}
+
       {BUILDINGS.map((b) => (
         <Link
           key={`spot-${b.id}`}
