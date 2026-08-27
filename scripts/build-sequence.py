@@ -12,7 +12,7 @@ ending. Motion-equalised sampling makes a linear scroll read as constant speed.
 Writes public/sequence/<id>-<width>/ per tier, then prints the config to
 paste into lib/sequence.ts.
 """
-import argparse, glob, os, shutil, subprocess, sys, tempfile
+import argparse, glob, os, re, shutil, subprocess, sys, tempfile
 
 def run(cmd):
     subprocess.run(cmd, check=True)
@@ -32,6 +32,15 @@ def read_pgm(path):
             j += 1
         fields.append(d[i:j]); i = j
     return d[i+1:]
+
+def source_size(video):
+    """Frame dimensions of the source, so tier heights match its real aspect."""
+    out = subprocess.run(['ffmpeg', '-hide_banner', '-i', video],
+                         capture_output=True, text=True).stderr
+    m = re.search(r'Video:.*?, (\d+)x(\d+)', out)
+    if not m:
+        sys.exit('could not read source dimensions')
+    return int(m.group(1)), int(m.group(2))
 
 def motion_curve(video, work):
     """Cumulative mean-absolute frame delta, computed on 160x90 grayscale."""
@@ -67,6 +76,7 @@ def main():
     widths = sorted(int(w) for w in args.widths.split(','))
     work = tempfile.mkdtemp()
     try:
+        src_w, src_h = source_size(args.video)
         cum = motion_curve(args.video, work)
         sel = select_frames(cum, args.frames)
         print(f'selected {len(sel)} of {len(cum)} source frames', file=sys.stderr)
@@ -92,7 +102,8 @@ def main():
         print("  ext: 'webp',")
         print('  tiers: [')
         for tier_id, w, _ in tiers:
-            print(f"    {{ id: '{tier_id}', width: {w}, height: {round(w*9/16)} }},")
+            h = round(w * src_h / src_w / 2) * 2
+            print(f"    {{ id: '{tier_id}', width: {w}, height: {h} }},")
         print('  ],')
     finally:
         shutil.rmtree(work, ignore_errors=True)
