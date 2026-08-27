@@ -46,6 +46,14 @@ export default function SequenceCanvas({
   const { frames, progress, ready, tier } = useImageSequence(config, { enabled: armed });
   const frameIndex = useRef({ i: 0 });
   const renderRef = useRef<(() => void) | null>(null);
+  // Overlays read the scrub from here rather than creating their own
+  // ScrollTrigger: a second trigger on this element measures against a layout
+  // the pin has already changed, and reports a progress of its own.
+  const scrub = useRef<Set<(p: number) => void>>(new Set());
+  const subscribe = useRef((fn: (p: number) => void) => {
+    scrub.current.add(fn);
+    return () => scrub.current.delete(fn);
+  }).current;
 
   useEffect(() => {
     if (armed || !wrapRef.current) return;
@@ -115,6 +123,7 @@ export default function SequenceCanvas({
         onUpdate: (self) => {
           frameIndex.current.i = self.progress * (config.frameCount - 1);
           render();
+          for (const fn of scrub.current) fn(self.progress);
         },
       });
 
@@ -131,8 +140,11 @@ export default function SequenceCanvas({
   return (
     <div ref={wrapRef} className="sequence">
       <canvas ref={canvasRef} className="sequence__canvas" aria-hidden="true" />
-      {labels && ready && tier && (
-        <BuildingLabels tier={tier} scrollLength={scrollLength} triggerRef={wrapRef} />
+      {/* Mounted as soon as the tier resolves, not when frames arrive: its
+          ScrollTrigger must be created alongside the pin, or it measures
+          against a layout the pin has already changed. */}
+      {labels && tier && (
+        <BuildingLabels tier={tier} subscribe={subscribe} />
       )}
       {children}
     </div>
