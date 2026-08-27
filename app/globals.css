@@ -204,21 +204,11 @@ body {
   left: 0;
   display: flex;
   align-items: center;
-  gap: 0.6rem;
   /* Positioned by transform from the frame-space mapping; this centres the
      block on that point without a second layout pass. */
   translate: -50% -50%;
   opacity: 0;
   white-space: nowrap;
-}
-
-.labels__dot {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--paper);
-  box-shadow: 0 0 0 2px rgba(11, 13, 14, 0.55), 0 0 0 6px rgba(11, 13, 14, 0.28);
-  flex: none;
 }
 
 .labels__name {
@@ -274,6 +264,72 @@ body {
   opacity: 0.85;
 }
 
+/* --- building hotspots --- */
+.hotspot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  translate: -50% -50%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hotspot__core,
+.hotspot__ring,
+.hotspot__pulse {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.hotspot__core {
+  width: 7px;
+  height: 7px;
+  background: var(--paper);
+  box-shadow: 0 1px 3px rgba(11, 13, 14, 0.6);
+}
+
+.hotspot__ring {
+  width: 26px;
+  height: 26px;
+  border: 1.5px solid rgba(244, 241, 236, 0.9);
+  filter: drop-shadow(0 1px 2px rgba(11, 13, 14, 0.55));
+  transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    height 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* The pulse is a separate ring so the resting one stays crisp under it. */
+.hotspot__pulse {
+  width: 26px;
+  height: 26px;
+  border: 1.5px solid rgba(244, 241, 236, 0.7);
+  animation: hotspot-pulse 2.6s ease-out infinite;
+}
+
+@keyframes hotspot-pulse {
+  0% { transform: scale(1); opacity: 0.7; }
+  70% { transform: scale(1.9); opacity: 0; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+
+.hotspot:hover .hotspot__ring {
+  width: 34px;
+  height: 34px;
+}
+
+.hotspot:focus-visible {
+  outline: 2px solid var(--paper);
+  outline-offset: 2px;
+  border-radius: 50%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hotspot__pulse { animation: none; opacity: 0.35; }
+}
+
 /* --- clickable callouts --- */
 .labels__item {
   text-decoration: none;
@@ -284,13 +340,8 @@ body {
   opacity: 0.72;
 }
 
-.labels__item:hover .labels__dot {
-  transform: scale(1.35);
-}
-
-.labels__name,
-.labels__dot {
-  transition: opacity 0.3s ease, transform 0.3s ease;
+.labels__name {
+  transition: opacity 0.3s ease;
 }
 
 .labels__item:focus-visible {
