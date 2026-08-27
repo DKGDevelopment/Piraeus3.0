@@ -21,20 +21,9 @@ export default function AssetRail({ filled }: { filled: boolean }) {
         </Link>
       </div>
 
-      <div className="rail__bottom">
-        <Link href="/" className="rail__home" aria-label="Back to the masterplan">
-          <svg viewBox="0 0 24 24" aria-hidden="true" className="rail__icon">
-            <path
-              d="M4 5h16v11H9l-5 4V5z"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.6"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </Link>
-        <img className="rail__mark" src="/brand/logo-pg.png" alt="Piraeus Gate" />
-      </div>
+      <Link href="/" className="rail__bottom" aria-label="Back to the masterplan">
+        <img className="rail__mark" src="/brand/logo-pg-stacked.png" alt="Piraeus Gate" />
+      </Link>
     </aside>
   );
 }

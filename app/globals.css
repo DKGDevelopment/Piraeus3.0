@@ -682,12 +682,16 @@ body {
   border-right-color: rgba(11, 13, 14, 0.12);
 }
 
-.rail__top,
-.rail__bottom {
+.rail__top {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+}
+
+.rail__bottom {
+  display: block;
+  color: inherit;
 }
 
 .rail__menu,
@@ -717,18 +721,10 @@ body {
 .rail--filled .rail__enquire:hover { color: var(--cream); }
 .rail:not(.rail--filled) .rail__enquire:hover { color: var(--ink); }
 
-.rail__home { color: inherit; }
-
-.rail__icon {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  padding: 4px;
-  border: 1px solid currentColor;
-}
-
 .rail__mark {
-  width: calc(var(--rail-w) * 0.62);
+  /* The stacked mark carries its own two lines, so it can take most of the
+     rail's width rather than sitting as a small badge. */
+  width: calc(var(--rail-w) * 0.74);
   height: auto;
   /* One black source asset, tinted to whichever ground the rail is on. */
   filter: brightness(0) invert(1);
