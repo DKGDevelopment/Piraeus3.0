@@ -111,3 +111,37 @@ export function coverFit(
     y: offsetY + ny * h,
   });
 }
+
+/**
+ * Markers for the street-level arrival at the end of the descent.
+ *
+ * Only the assets that read as distinct masses from the road are marked: at
+ * this altitude most of the site is behind the front block. No names here —
+ * the visitor has already been told what these are on the way down, and leader
+ * lines over a facade would clutter the arrival.
+ *
+ * The camera is still moving through this stretch, so these interpolate the
+ * same way, between their positions at GROUND_START and the last frame.
+ */
+export const GROUND_START = 0.88;
+
+export type GroundSpot = {
+  id: string;
+  from: { x: number; y: number };
+  to: { x: number; y: number };
+};
+
+export const GROUND_SPOTS: GroundSpot[] = [
+  { id: 'urban', from: { x: 0.541, y: 0.577 }, to: { x: 0.405, y: 0.517 } },
+  { id: 'gateway', from: { x: 0.338, y: 0.517 }, to: { x: 0.291, y: 0.457 } },
+  { id: 'skyblue', from: { x: 0.176, y: 0.553 }, to: { x: 0.196, y: 0.517 } },
+];
+
+/** Ground marker position at a given scrub progress. */
+export function groundAnchorAt(s: GroundSpot, p: number) {
+  const t = Math.min(1, Math.max(0, (p - GROUND_START) / (1 - GROUND_START)));
+  return {
+    x: s.from.x + (s.to.x - s.from.x) * t,
+    y: s.from.y + (s.to.y - s.from.y) * t,
+  };
+}
