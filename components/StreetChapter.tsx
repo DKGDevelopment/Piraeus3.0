@@ -1,6 +1,7 @@
 'use client';
 
 import SequenceCanvas from './SequenceCanvas';
+import TurnCue from './TurnCue';
 import { STREET_SEQUENCE } from '@/lib/sequence';
 
 /**
@@ -12,6 +13,14 @@ import { STREET_SEQUENCE } from '@/lib/sequence';
  */
 export default function StreetChapter() {
   return (
-    <SequenceCanvas config={STREET_SEQUENCE} scrollLength={4} preload="near" />
+    <SequenceCanvas config={STREET_SEQUENCE} scrollLength={4} preload="near">
+      <TurnCue
+        label="Explore the lane"
+        target="lane"
+        from={{ x: 0.155, y: 0.625 }}
+        to={{ x: 0.200, y: 0.605 }}
+        enter={0.55}
+      />
+    </SequenceCanvas>
   );
 }

@@ -1,14 +1,20 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { createContext, useEffect, useMemo, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { useImageSequence } from '@/lib/useImageSequence';
 import BuildingLabels from './BuildingLabels';
-import { MAX_DPR, type SequenceConfig } from '@/lib/sequence';
+import { MAX_DPR, type SequenceConfig, type SequenceTier } from '@/lib/sequence';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
+
+/** Lets overlays inside a sequence read its scrub and tier without prop drilling. */
+export const SequenceScrub = createContext<{
+  subscribe: (fn: (p: number) => void) => () => void;
+  tier: SequenceTier | null;
+} | null>(null);
 
 type Props = {
   config: SequenceConfig;
@@ -23,6 +29,8 @@ type Props = {
    * viewport away, so a later chapter does not compete with the one on screen.
    */
   preload?: 'eager' | 'near';
+  /** Anchor for in-page navigation between chapters. */
+  id?: string;
   children?: React.ReactNode;
 };
 
@@ -38,22 +46,37 @@ export default function SequenceCanvas({
   onReady,
   labels = false,
   preload = 'eager',
+  id,
   children,
 }: Props) {
   const [armed, setArmed] = useState(preload === 'eager');
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { frames, progress, ready, tier } = useImageSequence(config, { enabled: armed });
+
   const frameIndex = useRef({ i: 0 });
   const renderRef = useRef<(() => void) | null>(null);
   // Overlays read the scrub from here rather than creating their own
   // ScrollTrigger: a second trigger on this element measures against a layout
   // the pin has already changed, and reports a progress of its own.
   const scrub = useRef<Set<(p: number) => void>>(new Set());
+  const lastScrub = useRef(0);
   const subscribe = useRef((fn: (p: number) => void) => {
+    // Deliver the current progress on joining. An overlay can subscribe long
+    // after the reader has scrolled past its cue — a lazily-loaded chapter
+    // resolves its tier mid-scroll — and without this it would sit at zero
+    // until the next scroll event moved it.
+    fn(lastScrub.current);
     scrub.current.add(fn);
-    return () => scrub.current.delete(fn);
+    return () => {
+      scrub.current.delete(fn);
+    };
   }).current;
+
+  // Loading re-renders this component on every frame that arrives. A fresh
+  // context object each time would restart every overlay's effect mid-scroll,
+  // resetting what the last scrub had placed.
+  const scrubContext = useMemo(() => ({ subscribe, tier }), [subscribe, tier]);
 
   useEffect(() => {
     if (armed || !wrapRef.current) return;
@@ -123,6 +146,7 @@ export default function SequenceCanvas({
         onUpdate: (self) => {
           frameIndex.current.i = self.progress * (config.frameCount - 1);
           render();
+          lastScrub.current = self.progress;
           for (const fn of scrub.current) fn(self.progress);
         },
       });
@@ -138,7 +162,7 @@ export default function SequenceCanvas({
   );
 
   return (
-    <div ref={wrapRef} className="sequence">
+    <div ref={wrapRef} className="sequence" id={id}>
       <canvas ref={canvasRef} className="sequence__canvas" aria-hidden="true" />
       {/* Mounted as soon as the tier resolves, not when frames arrive: its
           ScrollTrigger must be created alongside the pin, or it measures
@@ -146,7 +170,9 @@ export default function SequenceCanvas({
       {labels && tier && (
         <BuildingLabels tier={tier} subscribe={subscribe} />
       )}
-      {children}
+      <SequenceScrub.Provider value={scrubContext}>
+        {children}
+      </SequenceScrub.Provider>
     </div>
   );
 }

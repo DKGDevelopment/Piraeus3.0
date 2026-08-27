@@ -113,7 +113,6 @@ export default function BuildingLabels({ tier, subscribe }: Props) {
       const unsubscribe = subscribe(onScrub);
       const onResize = () => place(last);
       window.addEventListener('resize', onResize);
-      place(0);
 
       return () => {
         unsubscribe();
