@@ -112,6 +112,7 @@ export const ASSET_PAGES: Record<string, AssetPage> = {
   },
 
   nexus: {
+    standfirst: 'Mixed-Use',
     film: 'nexus',
     project: { lead: [], body: ETHOS },
     residence: NEXUS_RESIDENCES[0],
