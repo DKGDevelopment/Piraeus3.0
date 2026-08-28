@@ -1,8 +1,9 @@
 'use client';
 
-import 'mapbox-gl/dist/mapbox-gl.css';
 import { useCallback, useMemo, useState } from 'react';
-import { usePropertyMap } from './usePropertyMap';
+// Swap this import (and the call below) for useMapboxPropertyMap to return
+// to Mapbox; both hooks present the same surface.
+import { useGooglePropertyMap } from './useGooglePropertyMap';
 import PropertyCard from './PropertyCard';
 import RegionSelector from './RegionSelector';
 import type { Property, Region } from '@/lib/map/types';
@@ -33,7 +34,7 @@ export default function PropertyMap({ regions }: { regions: Region[] }) {
     setRegionId(id);
   }, []);
 
-  const { container, status, token } = usePropertyMap({
+  const { container, status, token } = useGooglePropertyMap({
     region,
     onSelect: handleSelect,
     activeId: active?.id ?? null,
@@ -50,7 +51,10 @@ export default function PropertyMap({ regions }: { regions: Region[] }) {
       {!token ? (
         <div className="map__notice">
           <p>Map not configured.</p>
-          <p className="map__hint">Set NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN to enable it.</p>
+          <p className="map__hint">
+            Set NEXT_PUBLIC_GOOGLE_MAPS_API_KEY and NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID
+            to enable it.
+          </p>
         </div>
       ) : count === 0 ? (
         <div className="map__notice">

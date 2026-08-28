@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic';
 import { getRegions } from '@/lib/map/data';
 
-// Mapbox touches window on construction, so it must not run during the server
+// The maps SDK touches window on load, so it must not run during the server
 // render. Loading it on the client also keeps its weight off first paint.
 const PropertyMap = dynamic(() => import('./map/PropertyMap'), { ssr: false });
 
@@ -28,7 +28,7 @@ export default function LocationPanel({ heading, copy, map, places }: Props) {
   return (
     <div className="loc">
       <div className="loc__map">
-        {process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN ? (
+        {process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ? (
           <PropertyMap regions={getRegions()} />
         ) : map ? (
           <img className="loc__img" src={map} alt="Map of the surrounding area" />

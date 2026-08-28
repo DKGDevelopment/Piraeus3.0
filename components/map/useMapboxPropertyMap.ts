@@ -12,13 +12,19 @@ type Args = {
 };
 
 /**
+ * PARKED — not currently rendered.
+ *
+ * The Mapbox implementation, kept intact so returning to it is a swap in
+ * PropertyMap rather than a rebuild. Google Maps carries the map today because
+ * Mapbox needs an account and a bill this project does not have yet.
+ *
  * Owns the Mapbox instance and its markers.
  *
  * One map is kept across regions and its markers replaced, rather than a map
  * per region: constructing a map is the expensive part, and a switch should
  * read as the camera travelling rather than the map being rebuilt.
  */
-export function usePropertyMap({ region, onSelect, activeId }: Args) {
+export function useMapboxPropertyMap({ region, onSelect, activeId }: Args) {
   const container = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const markers = useRef<Map<string, mapboxgl.Marker>>(new Map());
