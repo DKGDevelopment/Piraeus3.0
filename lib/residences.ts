@@ -65,3 +65,22 @@ export const SKYWAY_RESIDENCES: Residence[] = [
     ],
   },
 ];
+
+/** Urban GL: four interiors supplied; compact layouts spanning a range. */
+export const URBAN_RESIDENCES: Residence[] = [
+  {
+    id: 'urban',
+    name: 'Urban GL Residences',
+    description:
+      'Compact residences arranged around a single generous room, with a joinery screen dividing sleeping from living and a full kitchen along one wall.',
+    area: 20,
+    areaMax: 35,
+    unit: 'm²',
+    rooms: [
+      { id: 'study', label: 'Study', image: '/residences/urban-1.webp' },
+      { id: 'dining', label: 'Dining', image: '/residences/urban-2.webp' },
+      { id: 'living', label: 'Living', image: '/residences/urban-3.webp' },
+      { id: 'bedroom', label: 'Bedroom', image: '/residences/urban-4.webp' },
+    ],
+  },
+];

@@ -1,6 +1,7 @@
 import {
   SKYBLUE_RESIDENCES,
   SKYWAY_RESIDENCES,
+  URBAN_RESIDENCES,
   type Residence,
 } from './residences';
 
@@ -105,6 +106,7 @@ export const ASSET_PAGES: Record<string, AssetPage> = {
     standfirst: 'Residences',
     film: 'urban',
     project: { lead: [], body: ETHOS },
+    residence: URBAN_RESIDENCES[0],
     location: NEIGHBOURHOOD,
   },
 
