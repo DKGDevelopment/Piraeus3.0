@@ -93,7 +93,12 @@ export const ASSET_PAGES: Record<string, AssetPage> = {
   greater: {
     standfirst: 'Residential',
     film: 'greater',
-    project: { lead: [], body: ETHOS },
+    project: {
+      lead: [
+        'Explore residences shaped by a considered approach to space, light, and modern living. Each home combines distinctive design with practical comfort, creating environments that feel open, refined, and effortlessly liveable.',
+      ],
+      body: ETHOS,
+    },
     residence: GREATER_RESIDENCES[0],
     location: NEIGHBOURHOOD,
   },
@@ -113,7 +118,12 @@ export const ASSET_PAGES: Record<string, AssetPage> = {
   urban: {
     standfirst: 'Residences',
     film: 'urban',
-    project: { lead: [], body: ETHOS },
+    project: {
+      lead: [
+        'Discover a select collection of residences defined by thoughtful design and effortless sophistication. Every home has been carefully considered to offer exceptional comfort, generous living spaces, and a refined sense of place.',
+      ],
+      body: ETHOS,
+    },
     residence: URBAN_RESIDENCES[0],
     location: NEIGHBOURHOOD,
   },
@@ -121,7 +131,12 @@ export const ASSET_PAGES: Record<string, AssetPage> = {
   realideal: {
     standfirst: 'Residential',
     film: 'realideal',
-    project: { lead: [], body: ETHOS },
+    project: {
+      lead: [
+        'Explore residences created around the way modern life is lived. From beautifully considered spaces to seamless amenities and conveniences, each home offers an elevated living experience designed to feel both effortless and distinctly your own.',
+      ],
+      body: ETHOS,
+    },
     residence: REALIDEAL_RESIDENCES[0],
     location: NEIGHBOURHOOD,
   },
