@@ -54,7 +54,7 @@ export const SKYWAY_RESIDENCES: Residence[] = [
     id: 'skyway',
     name: 'Skyway Residences',
     description:
-      'Residences on stacked terraces, each floor stepping back to hold a garden and a view toward the port.',
+      'These suites are designed as serene garden sanctuaries, where soft daylight, flowing layouts, and rich natural textures create an atmosphere of quiet retreat. With private landscaped terraces, generous living areas, and exclusive wellness-oriented amenities.',
     area: 56,
     areaMax: 83,
     unit: 'm²',
