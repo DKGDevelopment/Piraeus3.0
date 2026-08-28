@@ -84,3 +84,23 @@ export const URBAN_RESIDENCES: Residence[] = [
     ],
   },
 ];
+
+/**
+ * S&S Nexus: three interiors supplied. No area given yet, so the figure reads
+ * as unknown rather than as a number.
+ */
+export const NEXUS_RESIDENCES: Residence[] = [
+  {
+    id: 'nexus',
+    name: 'S&S Nexus Residences',
+    description:
+      'Studios opening onto a shared corridor, each with its own workspace and a terrace beyond the glazing.',
+    area: 0,
+    unit: 'm²',
+    rooms: [
+      { id: 'bedroom', label: 'Bedroom', image: '/residences/nexus-1.webp' },
+      { id: 'workspace', label: 'Workspace', image: '/residences/nexus-2.webp' },
+      { id: 'corridor', label: 'Corridor', image: '/residences/nexus-3.webp' },
+    ],
+  },
+];

@@ -2,6 +2,7 @@ import {
   SKYBLUE_RESIDENCES,
   SKYWAY_RESIDENCES,
   URBAN_RESIDENCES,
+  NEXUS_RESIDENCES,
   type Residence,
 } from './residences';
 
@@ -110,5 +111,10 @@ export const ASSET_PAGES: Record<string, AssetPage> = {
     location: NEIGHBOURHOOD,
   },
 
-  nexus: { location: NEIGHBOURHOOD },
+  nexus: {
+    film: 'nexus',
+    project: { lead: [], body: ETHOS },
+    residence: NEXUS_RESIDENCES[0],
+    location: NEIGHBOURHOOD,
+  },
 };
