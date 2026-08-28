@@ -113,12 +113,24 @@ export default function Residences({ residence }: { residence: Residence }) {
         {/* One figure for the residence, not per room: the area given is the
             whole apartment, and inventing a breakdown would be fiction. */}
         <div className="res__figure">
-          <p className="res__room">Total area</p>
-          <p className="res__area">
-            <span className="res__number">{residence.area.toLocaleString('en-US')}</span>
-            <span className="res__unit">{residence.unit}</span>
+          <p className="res__room">
+            {residence.areaMax ? 'Interior area' : 'Total area'}
           </p>
-          <p className="res__caption">total interior area</p>
+          <p className="res__area">
+            {/* A range where the layouts span sizes; an em dash where the
+                figure is not known yet, rather than an area of nothing. */}
+            <span className="res__number">
+              {residence.area
+                ? residence.areaMax
+                  ? `${residence.area}–${residence.areaMax}`
+                  : residence.area.toLocaleString('en-US')
+                : '—'}
+            </span>
+            {residence.area > 0 && <span className="res__unit">{residence.unit}</span>}
+          </p>
+          <p className="res__caption">
+            {residence.areaMax ? 'range of interior areas' : 'total interior area'}
+          </p>
         </div>
       </aside>
     </div>
