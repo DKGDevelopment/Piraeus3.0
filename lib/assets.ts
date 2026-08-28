@@ -3,6 +3,7 @@ import {
   SKYWAY_RESIDENCES,
   URBAN_RESIDENCES,
   NEXUS_RESIDENCES,
+  GREATER_RESIDENCES,
   type Residence,
 } from './residences';
 
@@ -94,7 +95,13 @@ export const ASSET_PAGES: Record<string, AssetPage> = {
 
   // Awaiting film, copy, interiors and areas. Each opens on a title card and
   // carries the location and the coda; panels appear as their content arrives.
-  greater: { location: NEIGHBOURHOOD },
+  greater: {
+    standfirst: 'Residential',
+    film: 'greater',
+    project: { lead: [], body: ETHOS },
+    residence: GREATER_RESIDENCES[0],
+    location: NEIGHBOURHOOD,
+  },
 
   gateway: {
     standfirst: 'Offices',
@@ -110,6 +117,9 @@ export const ASSET_PAGES: Record<string, AssetPage> = {
     residence: URBAN_RESIDENCES[0],
     location: NEIGHBOURHOOD,
   },
+
+  // Awaiting film, copy, interiors and areas.
+  realideal: { location: NEIGHBOURHOOD },
 
   nexus: {
     standfirst: 'Mixed-Use',

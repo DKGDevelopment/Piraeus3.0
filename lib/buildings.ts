@@ -65,6 +65,14 @@ export const BUILDINGS: Building[] = [
     enter: 0.18,
   },
   {
+    id: 'realideal',
+    name: 'Real Ideal',
+    from: { x: 0.313, y: 0.508 },
+    to: { x: 0.256, y: 0.373 },
+    label: { x: 0.055, y: -0.115 },
+    enter: 0.15,
+  },
+  {
     id: 'nexus',
     name: 'S&S Nexus',
     from: { x: 0.684, y: 0.748 },
