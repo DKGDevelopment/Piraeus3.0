@@ -21,6 +21,7 @@ const PLACEHOLDER_OFFSETS: Record<string, [number, number]> = {
   gateway: [-0.0002, -0.0002],
   urban: [0.0006, -0.0007],
   nexus: [0.0018, -0.0004],
+  realideal: [-0.0012, 0.0016],
 };
 
 const properties: Property[] = BUILDINGS.map((b) => {

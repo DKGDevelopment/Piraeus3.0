@@ -118,6 +118,9 @@ export const ASSET_PAGES: Record<string, AssetPage> = {
     location: NEIGHBOURHOOD,
   },
 
+  // Awaiting film, copy, interiors and areas.
+  realideal: { location: NEIGHBOURHOOD },
+
   nexus: {
     standfirst: 'Mixed-Use',
     film: 'nexus',
