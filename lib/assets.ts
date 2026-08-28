@@ -4,6 +4,7 @@ import {
   URBAN_RESIDENCES,
   NEXUS_RESIDENCES,
   GREATER_RESIDENCES,
+  REALIDEAL_RESIDENCES,
   type Residence,
 } from './residences';
 
@@ -118,8 +119,12 @@ export const ASSET_PAGES: Record<string, AssetPage> = {
     location: NEIGHBOURHOOD,
   },
 
-  // Awaiting film, copy, interiors and areas.
-  realideal: { location: NEIGHBOURHOOD },
+  realideal: {
+    film: 'realideal',
+    project: { lead: [], body: ETHOS },
+    residence: REALIDEAL_RESIDENCES[0],
+    location: NEIGHBOURHOOD,
+  },
 
   nexus: {
     standfirst: 'Mixed-Use',
