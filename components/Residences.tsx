@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import type { Residence } from '@/lib/residences';
@@ -23,6 +23,7 @@ export default function Residences({ residence }: { residence: Residence }) {
   // What the base layer is showing: the wipe lands on top of it, then becomes it.
   const [settled, setSettled] = useState(0);
   const stage = useRef<HTMLDivElement>(null);
+  const figure = useRef<HTMLSpanElement>(null);
 
   const room = residence.rooms[active];
   const base = residence.rooms[settled];
@@ -48,6 +49,52 @@ export default function Residences({ residence }: { residence: Residence }) {
     },
     { scope: stage, dependencies: [active, wiping] }
   );
+
+  /**
+   * The area counts up the first time the panel is reached rather than being
+   * there already. The deck moves sideways, so the trigger is the figure
+   * entering the viewport rather than a scroll position — an observer reads the
+   * translated position correctly where a scroll offset would not.
+   */
+  useEffect(() => {
+    const el = figure.current;
+    if (!el || !residence.area) return;
+
+    const format = (n: number) => Math.round(n).toLocaleString('en-US');
+    const write = (t: number) =>
+      (el.textContent = residence.areaMax
+        ? `${format(residence.area * t)}\u2013${format(residence.areaMax * t)}`
+        : format(residence.area * t));
+
+    // The rendered figure stands until the count actually starts: writing zero
+    // up front would show 0 to anyone who sees the panel's edge early, and
+    // would leave the figure at zero if the observer never fired.
+    let raf = 0;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        io.disconnect();
+        write(0);
+        const started = performance.now();
+        const DURATION = 1100;
+        const tick = (now: number) => {
+          const p = Math.min(1, (now - started) / DURATION);
+          // Eased out, so the figure settles rather than stopping dead.
+          write(1 - Math.pow(1 - p, 3));
+          if (p < 1) raf = requestAnimationFrame(tick);
+        };
+        raf = requestAnimationFrame(tick);
+      },
+      { threshold: 0.35 }
+    );
+
+    io.observe(el);
+    return () => {
+      io.disconnect();
+      cancelAnimationFrame(raf);
+    };
+  }, [residence]);
 
   return (
     <div className="res">
@@ -119,7 +166,7 @@ export default function Residences({ residence }: { residence: Residence }) {
           <p className="res__area">
             {/* A range where the layouts span sizes; an em dash where the
                 figure is not known yet, rather than an area of nothing. */}
-            <span className="res__number">
+            <span className="res__number" ref={figure}>
               {residence.area
                 ? residence.areaMax
                   ? `${residence.area}–${residence.areaMax}`
