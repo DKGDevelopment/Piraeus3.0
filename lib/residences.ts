@@ -35,7 +35,7 @@ export const SKYBLUE_RESIDENCES: Residence[] = [
     id: 'skyblue',
     name: 'Skyblue Residences',
     description:
-      'Residences arranged around a generous living space, with private terraces and a mix of layouts across the two towers.',
+      'Discover our curated selection of residences in Athens, where effortless living meets the calm elegance of the Riviera. Each home is thoughtfully designed to reflect the natural beauty and relaxed rhythm of the Mediterranean.',
     area: 147,
     unit: 'm²',
     rooms: [

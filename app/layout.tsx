@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { DM_Sans, Inter } from 'next/font/google';
 import SmoothScroll from '@/components/SmoothScroll';
 import './globals.css';
 
@@ -12,6 +12,15 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
+// Body copy on the asset pages: warmer and wider than Inter, which stays for
+// titles and labels.
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  display: 'swap',
+  variable: '--font-dm',
+});
+
 export const metadata: Metadata = {
   title: 'Piraeus Masterplan',
   description: 'An urban redevelopment masterplan for the Piraeus waterfront.',
@@ -19,7 +28,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={`${inter.variable} ${dmSans.variable}`}>
       <body>
         <SmoothScroll>{children}</SmoothScroll>
       </body>
