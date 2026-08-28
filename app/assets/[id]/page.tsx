@@ -64,6 +64,8 @@ export default async function AssetPage({
           <div className="panel__spread">
             <div className="panel__col">
               <p className="panel__eyebrow">The Project</p>
+              {/* An asset with no copy of its own still shows the eyebrow and
+                  the shared ethos, rather than an empty column. */}
               {page.project.lead.map((line) => (
                 <p className="panel__lead" key={line}>
                   {line}

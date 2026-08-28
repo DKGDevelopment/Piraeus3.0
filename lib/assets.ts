@@ -93,7 +93,20 @@ export const ASSET_PAGES: Record<string, AssetPage> = {
   // Awaiting film, copy, interiors and areas. Each opens on a title card and
   // carries the location and the coda; panels appear as their content arrives.
   greater: { location: NEIGHBOURHOOD },
-  gateway: { location: NEIGHBOURHOOD },
-  urban: { location: NEIGHBOURHOOD },
+
+  gateway: {
+    standfirst: 'Offices',
+    film: 'gateway',
+    project: { lead: [], body: ETHOS },
+    location: NEIGHBOURHOOD,
+  },
+
+  urban: {
+    standfirst: 'Residences',
+    film: 'urban',
+    project: { lead: [], body: ETHOS },
+    location: NEIGHBOURHOOD,
+  },
+
   nexus: { location: NEIGHBOURHOOD },
 };
