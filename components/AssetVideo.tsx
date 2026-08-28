@@ -2,7 +2,7 @@
 
 type Props = {
   name: string;
-  standfirst: string;
+  standfirst?: string;
   /** Base name in /public/video: <src>.mp4 and <src>-sm.mp4. */
   src: string;
 };
@@ -40,7 +40,7 @@ export default function AssetVideo({ name, standfirst, src }: Props) {
       <div className="asset-hero">
         <div className="asset-hero__title-block">
           <h1 className="asset-hero__title">{name}</h1>
-          <p className="asset-hero__standfirst">{standfirst}</p>
+          {standfirst && <p className="asset-hero__standfirst">{standfirst}</p>}
         </div>
       </div>
     </div>

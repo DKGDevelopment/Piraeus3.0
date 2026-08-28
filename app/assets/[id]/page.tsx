@@ -38,15 +38,28 @@ export default async function AssetPage({
 
   return (
     <main>
-      <AssetShell>
-        <section className="panel panel--film">
-          <AssetVideo
-            name={building.name}
-            standfirst={page.standfirst}
-            src={page.film}
-          />
-        </section>
+      <AssetShell filledFromStart={!page.film}>
+        {page.film ? (
+          <section className="panel panel--film">
+            <AssetVideo
+              name={building.name}
+              standfirst={page.standfirst}
+              src={page.film}
+            />
+          </section>
+        ) : (
+          // Until the film exists the page still opens on the asset, named.
+          <section className="panel panel--title">
+            <div className="titlecard">
+              <h1 className="asset-hero__title">{building.name}</h1>
+              {page.standfirst && (
+                <p className="asset-hero__standfirst">{page.standfirst}</p>
+              )}
+            </div>
+          </section>
+        )}
 
+        {page.project && (
         <section className="panel panel--text">
           <div className="panel__spread">
             <div className="panel__col">
@@ -67,6 +80,7 @@ export default async function AssetPage({
             </div>
           </div>
         </section>
+        )}
 
         {page.residence && (
           <section className="panel panel--res">
