@@ -118,7 +118,12 @@ export const ASSET_PAGES: Record<string, AssetPage> = {
   urban: {
     standfirst: 'Residences',
     film: 'urban',
-    project: { lead: [], body: ETHOS },
+    project: {
+      lead: [
+        'Discover a select collection of residences defined by thoughtful design and effortless sophistication. Every home has been carefully considered to offer exceptional comfort, generous living spaces, and a refined sense of place.',
+      ],
+      body: ETHOS,
+    },
     residence: URBAN_RESIDENCES[0],
     location: NEIGHBOURHOOD,
   },
