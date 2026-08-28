@@ -120,6 +120,7 @@ export const ASSET_PAGES: Record<string, AssetPage> = {
   },
 
   realideal: {
+    standfirst: 'Residential',
     film: 'realideal',
     project: { lead: [], body: ETHOS },
     residence: REALIDEAL_RESIDENCES[0],
