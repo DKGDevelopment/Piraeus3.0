@@ -35,7 +35,7 @@ export const SKYBLUE_RESIDENCES: Residence[] = [
     id: 'skyblue',
     name: 'Skyblue Residences',
     description:
-      'Residences arranged around a generous living space, with private terraces and a mix of layouts across the two towers.',
+      'Discover our curated selection of residences in Athens, where effortless living meets the calm elegance of the Riviera. Each home is thoughtfully designed to reflect the natural beauty and relaxed rhythm of the Mediterranean.',
     area: 147,
     unit: 'm²',
     rooms: [
@@ -54,7 +54,7 @@ export const SKYWAY_RESIDENCES: Residence[] = [
     id: 'skyway',
     name: 'Skyway Residences',
     description:
-      'Residences on stacked terraces, each floor stepping back to hold a garden and a view toward the port.',
+      'These suites are designed as serene garden sanctuaries, where soft daylight, flowing layouts, and rich natural textures create an atmosphere of quiet retreat. With private landscaped terraces, generous living areas, and exclusive wellness-oriented amenities.',
     area: 56,
     areaMax: 83,
     unit: 'm²',
