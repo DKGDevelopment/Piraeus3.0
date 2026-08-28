@@ -40,6 +40,7 @@ export type AssetPage = {
 
 /** True of every asset, so it carries to a page before its own copy is written. */
 const ETHOS = [
+  'Discover a place where every detail is crafted to meet the highest standards of comfort and elegance. Find your perfect sanctuary at Piraeus Gate today.',
   'At Piraeus Gate, we believe that a home is more than a physical space — it’s a reflection of your aspirations, well-being, and values.',
   'Our mission is to immerse you in a lifestyle that balances refined aesthetics, architectural excellence, and a profound sense of community.',
 ];
@@ -66,10 +67,7 @@ export const ASSET_PAGES: Record<string, AssetPage> = {
         'The architecture of SkyBlue balances clean contemporary lines with Mediterranean warmth and texture.',
         'Whether you’re seeking a serene retreat, cultural hub, or a space that fosters personal growth, SkyBlue offers it all.',
       ],
-      body: [
-        'At Piraeus Gate, we believe that a home is more than a physical space — it’s a reflection of your aspirations, well-being, and values.',
-        'Our mission is to immerse you in a lifestyle that balances refined aesthetics, architectural excellence, and a profound sense of community.',
-      ],
+      body: ETHOS,
     },
     residence: SKYBLUE_RESIDENCES[0],
     location: { ...NEIGHBOURHOOD, map: '/location/skyblue-map.webp' },
@@ -84,11 +82,7 @@ export const ASSET_PAGES: Record<string, AssetPage> = {
         'Explore our collection of residences, each designed to offer effortless living in liberating spaces.',
         'Our curated homes blend luxury with convenience, ensuring a seamless living experience.',
       ],
-      body: [
-        'Discover a place where every detail is crafted to meet the highest standards of comfort and elegance. Find your perfect sanctuary at Piraeus Gate today.',
-        'At Piraeus Gate, we believe that a home is more than a physical space — it’s a reflection of your aspirations, well-being, and values.',
-        'Our mission is to immerse you in a lifestyle that balances refined aesthetics, architectural excellence, and a profound sense of community.',
-      ],
+      body: ETHOS,
     },
     residence: SKYWAY_RESIDENCES[0],
     location: NEIGHBOURHOOD,
