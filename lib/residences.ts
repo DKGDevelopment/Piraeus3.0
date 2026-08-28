@@ -20,6 +20,8 @@ export type Residence = {
   description: string;
   /** Numeric so it can be formatted rather than parsed back out. */
   area: number;
+  /** Set when the residence spans a range of sizes rather than one. */
+  areaMax?: number;
   unit: string;
   rooms: Room[];
 };
@@ -42,6 +44,24 @@ export const SKYBLUE_RESIDENCES: Residence[] = [
       { id: 'lounge', label: 'Lounge', image: '/residences/skyblue-3.webp' },
       { id: 'study', label: 'Study', image: '/residences/skyblue-4.webp' },
       { id: 'dining', label: 'Dining', image: '/residences/skyblue-5.webp' },
+    ],
+  },
+];
+
+/** Skyway: three interiors supplied; layouts span a range of sizes. */
+export const SKYWAY_RESIDENCES: Residence[] = [
+  {
+    id: 'skyway',
+    name: 'Skyway Residences',
+    description:
+      'Residences on stacked terraces, each floor stepping back to hold a garden and a view toward the port.',
+    area: 56,
+    areaMax: 83,
+    unit: 'm²',
+    rooms: [
+      { id: 'living', label: 'Living', image: '/residences/skyway-1.webp' },
+      { id: 'bedroom', label: 'Bedroom', image: '/residences/skyway-2.webp' },
+      { id: 'kitchen', label: 'Kitchen', image: '/residences/skyway-3.webp' },
     ],
   },
 ];

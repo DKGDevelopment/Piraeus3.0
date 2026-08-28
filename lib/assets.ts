@@ -1,4 +1,8 @@
-import { SKYBLUE_RESIDENCES, type Residence } from './residences';
+import {
+  SKYBLUE_RESIDENCES,
+  SKYWAY_RESIDENCES,
+  type Residence,
+} from './residences';
 
 /**
  * Everything an asset page renders, per asset.
@@ -70,6 +74,7 @@ export const ASSET_PAGES: Record<string, AssetPage> = {
         'Our mission is to immerse you in a lifestyle that balances refined aesthetics, architectural excellence, and a profound sense of community.',
       ],
     },
+    residence: SKYWAY_RESIDENCES[0],
     location: NEIGHBOURHOOD,
   },
 };
