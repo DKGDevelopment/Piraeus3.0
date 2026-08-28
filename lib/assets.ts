@@ -67,11 +67,12 @@ export const ASSET_PAGES: Record<string, AssetPage> = {
     film: 'skyway',
     project: {
       lead: [
-        'Skyway rises above the avenue in stacked terraces, each floor stepping to hold a garden and a view of the port.',
+        'Explore our collection of residences, each designed to offer effortless living in liberating spaces.',
+        'Our curated homes blend luxury with convenience, ensuring a seamless living experience.',
       ],
       body: [
-        'At Piraeus Gate, we believe that a home is more than a physical space — it’s a reflection of your aspirations, well-being, and values.',
-        'Our mission is to immerse you in a lifestyle that balances refined aesthetics, architectural excellence, and a profound sense of community.',
+        'Discover a place where every detail is crafted to meet the highest standards of comfort and elegance.',
+        'Find your perfect sanctuary at Piraeus Gate today.',
       ],
     },
     residence: SKYWAY_RESIDENCES[0],
