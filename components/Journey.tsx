@@ -8,6 +8,7 @@ import Stage from './Stage';
 import SequenceLayer from './SequenceLayer';
 import Intro from './Intro';
 import Stats from './Stats';
+import ScrollCue from './ScrollCue';
 import BuildingLabels from './BuildingLabels';
 import ChapterSpots from './ChapterSpots';
 import TurnCue from './TurnCue';
@@ -49,6 +50,16 @@ export default function Journey() {
   const handleProgress = useCallback((p: number) => setProgress(p), []);
   const handleReady = useCallback(() => setReady(true), []);
   const handleEnter = useCallback(() => setEntered(true), []);
+
+  // The cue is dismissed by the act it asks for, so it listens for the first
+  // scroll rather than counting down.
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    if (!entered || scrolled) return;
+    const onScroll = () => window.scrollY > 8 && setScrolled(true);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [entered, scrolled]);
 
   const tail = useRef<HTMLDivElement>(null);
   const veil = useRef<HTMLDivElement>(null);
@@ -92,6 +103,8 @@ export default function Journey() {
         />
       )}
 
+      <ScrollCue shown={entered} leaving={scrolled} />
+
       <Stage length={TOTAL}>
         <SequenceLayer
           config={HERO_SEQUENCE}
@@ -106,8 +119,7 @@ export default function Journey() {
               A New Entrance<br />to Piraeus
             </h1>
             {entered && <Stats />}
-            <p className="hero__scroll-cue">Scroll to descend</p>
-          </div>
+            </div>
         </SequenceLayer>
 
         <SequenceLayer config={STREET_SEQUENCE} offset={STREET_AT} length={STREET}>

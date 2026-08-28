@@ -1322,3 +1322,85 @@ body {
 .panel--title .asset-hero__title { color: var(--ink); }
 
 .panel--title .asset-hero__standfirst { color: var(--ink); opacity: 0.6; }
+
+/* --- scroll cue --- */
+.cue {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  /* Lifted clear of the headline and figures, which hold the lower left. */
+  padding-bottom: 26vh;
+  pointer-events: none;
+  color: var(--paper);
+  text-align: center;
+  text-shadow: 0 1px 3px rgba(11, 13, 14, 0.7), 0 2px 20px rgba(11, 13, 14, 0.6);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+/* Arrives a beat after the gate opens, so the shot lands first. */
+.cue--shown {
+  animation: cue-in 0.9s ease 0.4s both;
+  visibility: visible;
+}
+
+.cue--gone {
+  opacity: 0;
+  visibility: hidden;
+}
+
+@keyframes cue-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+.cue__title {
+  font-size: clamp(1.5rem, 2.6vw, 2.4rem);
+  font-weight: 300;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+}
+
+/* A hairline the dot travels down: the gesture, drawn. */
+.cue__rail {
+  position: relative;
+  width: 1px;
+  height: clamp(3.5rem, 7vh, 5.5rem);
+  background: rgba(244, 241, 236, 0.35);
+  overflow: hidden;
+}
+
+.cue__dot {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 3px;
+  height: 34%;
+  margin-left: -1.5px;
+  background: var(--paper);
+  animation: cue-travel 2.1s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+@keyframes cue-travel {
+  0% { transform: translateY(-110%); }
+  55%, 100% { transform: translateY(310%); }
+}
+
+.cue__note {
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cue { animation: none; }
+  .cue__dot { animation: none; transform: translateY(90%); }
+}
