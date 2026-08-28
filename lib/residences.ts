@@ -94,7 +94,7 @@ export const NEXUS_RESIDENCES: Residence[] = [
     id: 'nexus',
     name: 'S&S Nexus Residences',
     description:
-      'Studios opening onto a shared corridor, each with its own workspace and a terrace beyond the glazing.',
+      'From artful communal lounges to thoughtfully curated design details, every environment celebrates a rich sense of place.',
     area: 0,
     unit: 'm²',
     rooms: [
