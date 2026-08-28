@@ -123,3 +123,23 @@ export const GREATER_RESIDENCES: Residence[] = [
     ],
   },
 ];
+
+/** Real Ideal: five interiors supplied; layouts span a range. */
+export const REALIDEAL_RESIDENCES: Residence[] = [
+  {
+    id: 'realideal',
+    name: 'Real Ideal Residences',
+    description:
+      'Apartments over an open plan, with a full-height sliding wall opening the living space onto a private terrace.',
+    area: 45,
+    areaMax: 71,
+    unit: 'm²',
+    rooms: [
+      { id: 'bedroom', label: 'Bedroom', image: '/residences/realideal-1.webp' },
+      { id: 'living', label: 'Living', image: '/residences/realideal-2.webp' },
+      { id: 'kitchen', label: 'Kitchen', image: '/residences/realideal-3.webp' },
+      { id: 'terrace', label: 'Terrace', image: '/residences/realideal-4.webp' },
+      { id: 'dining', label: 'Dining', image: '/residences/realideal-5.webp' },
+    ],
+  },
+];
