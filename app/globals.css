@@ -1304,3 +1304,17 @@ body {
   border-bottom: 1px solid currentColor;
   text-decoration: none;
 }
+
+/* --- title card, where an asset has no film yet --- */
+.panel--title {
+  display: flex;
+  align-items: center;
+  background: var(--cream);
+  color: var(--ink);
+  padding-left: calc(var(--rail-w) + clamp(1.5rem, 5vw, 6rem));
+  padding-right: clamp(1.5rem, 8vw, 10rem);
+}
+
+.panel--title .asset-hero__title { color: var(--ink); }
+
+.panel--title .asset-hero__standfirst { color: var(--ink); opacity: 0.6; }

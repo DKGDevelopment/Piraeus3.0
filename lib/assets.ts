@@ -12,11 +12,15 @@ import {
  * omits those panels rather than showing empty ones.
  */
 export type AssetPage = {
-  /** Category line under the title. */
-  standfirst: string;
-  /** Base name in /public/video: <film>.mp4, -sm.mp4, .webm, -sm.webm, -poster.webp */
-  film: string;
-  project: {
+  /** Category line under the title. Omitted until the asset's use is settled. */
+  standfirst?: string;
+  /**
+   * Base name in /public/video: <film>.mp4, -sm.mp4, .webm, -sm.webm,
+   * -poster.webp. Without one the page opens on a title card instead, so an
+   * asset can have a page before it has a film.
+   */
+  film?: string;
+  project?: {
     lead: string[];
     body: string[];
   };
@@ -29,6 +33,12 @@ export type AssetPage = {
     places: { name: string; note: string }[];
   };
 };
+
+/** True of every asset, so it carries to a page before its own copy is written. */
+const ETHOS = [
+  'At Piraeus Gate, we believe that a home is more than a physical space — it’s a reflection of your aspirations, well-being, and values.',
+  'Our mission is to immerse you in a lifestyle that balances refined aesthetics, architectural excellence, and a profound sense of community.',
+];
 
 /** Shared until each asset's own neighbourhood copy is written. */
 const NEIGHBOURHOOD = {
@@ -79,4 +89,11 @@ export const ASSET_PAGES: Record<string, AssetPage> = {
     residence: SKYWAY_RESIDENCES[0],
     location: NEIGHBOURHOOD,
   },
+
+  // Awaiting film, copy, interiors and areas. Each opens on a title card and
+  // carries the location and the coda; panels appear as their content arrives.
+  greater: { location: NEIGHBOURHOOD },
+  gateway: { location: NEIGHBOURHOOD },
+  urban: { location: NEIGHBOURHOOD },
+  nexus: { location: NEIGHBOURHOOD },
 };
