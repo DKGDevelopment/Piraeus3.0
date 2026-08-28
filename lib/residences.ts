@@ -104,3 +104,22 @@ export const NEXUS_RESIDENCES: Residence[] = [
     ],
   },
 ];
+
+/** Piraeus Greater Apartments: four interiors supplied; layouts span a range. */
+export const GREATER_RESIDENCES: Residence[] = [
+  {
+    id: 'greater',
+    name: 'Piraeus Greater Apartments',
+    description:
+      'Apartments over an open plan, with exposed brick against pale joinery and a kitchen set along one wall of the living space.',
+    area: 39,
+    areaMax: 51,
+    unit: 'm²',
+    rooms: [
+      { id: 'kitchen', label: 'Kitchen', image: '/residences/greater-1.webp' },
+      { id: 'bedroom', label: 'Bedroom', image: '/residences/greater-2.webp' },
+      { id: 'living', label: 'Living', image: '/residences/greater-3.webp' },
+      { id: 'dining', label: 'Dining', image: '/residences/greater-4.webp' },
+    ],
+  },
+];
