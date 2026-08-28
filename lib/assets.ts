@@ -101,7 +101,12 @@ export const ASSET_PAGES: Record<string, AssetPage> = {
   gateway: {
     standfirst: 'Offices',
     film: 'gateway',
-    project: { lead: [], body: ETHOS },
+    project: {
+      lead: [
+        'Unconventional approach, bold architectural forms, cutting-edge technology, and functionality of Gateway Business Hub will facilitate the most efficient work processes and quality rest for the employees and guests of the business center, while your business will grow, revealing new partnership opportunities.',
+      ],
+      body: ETHOS,
+    },
     location: NEIGHBOURHOOD,
   },
 
@@ -124,7 +129,13 @@ export const ASSET_PAGES: Record<string, AssetPage> = {
   nexus: {
     standfirst: 'Mixed-Use',
     film: 'nexus',
-    project: { lead: [], body: ETHOS },
+    project: {
+      lead: [
+        'S&S Nexus combines timeless architectural design, a wellness-focused lifestyle, and a serene coastal-mountain setting. Every space is thoughtfully crafted to inspire calm, elevate daily living, and create a sense of refined harmony.',
+        'From private fitness studios to guided meditation sessions, our amenities are designed to enhance your well-being and foster a sense of harmony.',
+      ],
+      body: ETHOS,
+    },
     residence: NEXUS_RESIDENCES[0],
     location: NEIGHBOURHOOD,
   },
