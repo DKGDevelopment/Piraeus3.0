@@ -16,7 +16,6 @@ const LOGOS = [
   'kronos',
   'ksn',
   'lavish',
-  'marlon-tate',
   'meletitiki',
   'msm',
   'resnovae',
