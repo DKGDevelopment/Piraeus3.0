@@ -506,14 +506,7 @@ body {
 
 @media (min-width: 900px) {
   .team-body {
-    max-width: 76ch;
-    columns: 2;
-    column-gap: 3.5rem;
-  }
-
-  .team-body__p {
-    break-inside: avoid;
-    margin-bottom: 0.2rem;
+    max-width: 78rem;
   }
 }
 
