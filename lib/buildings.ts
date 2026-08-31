@@ -218,7 +218,7 @@ export const COURT_SPOTS: ChapterSpot[] = [
   {
     id: 'urban',
     from: { x: 0.470, y: 0.454 },
-    to: { x: 0.340, y: 0.671 },
+    to: { x: 0.073, y: 0.827 },
     enter: 0.12,
     exit: 1.0,
   },
