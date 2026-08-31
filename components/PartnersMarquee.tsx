@@ -3,7 +3,6 @@ const LOGOS = [
   'alexopoulos',
   'arapis',
   'carlo-pasqualin',
-  'copy-of-logo-01',
   'dae',
   'danos',
   'emphasis',
