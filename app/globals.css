@@ -425,6 +425,62 @@ body {
   display: block;
 }
 
+/* --- team page --- */
+.team {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.team-film {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  background: var(--ink);
+}
+
+.team-film__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.team-film__back {
+  position: absolute;
+  top: clamp(1.25rem, 3vw, 3rem);
+  left: clamp(1.25rem, 3vw, 3rem);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--paper);
+  text-decoration: none;
+  opacity: 0.75;
+  text-shadow: 0 1px 2px rgba(11, 13, 14, 0.8);
+  transition: opacity 0.3s ease;
+}
+
+.team-film__back:hover { opacity: 1; }
+
+.team-body {
+  max-width: 46ch;
+  margin: 0 auto;
+  padding: clamp(4rem, 12vw, 8rem) clamp(1.5rem, 6vw, 3rem);
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+.team-body__p {
+  font-family: var(--font-body);
+  font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+  line-height: 1.7;
+  opacity: 0.85;
+}
+
 /* --- asset approach --- */
 .veil {
   position: fixed;
