@@ -774,6 +774,10 @@ body {
 }
 
 .panel--text {
+  /* Content tops out around 88rem; beyond that a full 100vw panel just
+     leaves dead cream before the next panel, so cap it instead of letting
+     the gap grow with the display. */
+  width: min(100vw, 88rem);
   display: flex;
   align-items: center;
   background: var(--cream);

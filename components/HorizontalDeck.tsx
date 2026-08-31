@@ -32,6 +32,18 @@ export default function HorizontalDeck({
       const el = track.current!;
       const distance = () => Math.max(0, el.scrollWidth - window.innerWidth);
 
+      // Snaps the settled scroll position to a panel edge, so a wheel flick
+      // that only nudges past one panel doesn't strand the reader half
+      // in and out of the next — they land on it and hold there until they
+      // deliberately scroll again.
+      const panelEdges = () => {
+        const d = distance();
+        if (d <= 0) return [0];
+        return Array.from(el.children).map((child) =>
+          Math.min(1, (child as HTMLElement).offsetLeft / d)
+        );
+      };
+
       const st = ScrollTrigger.create({
         trigger: frame.current,
         start: 'top top',
@@ -39,6 +51,14 @@ export default function HorizontalDeck({
         pin: true,
         scrub: 0.6,
         invalidateOnRefresh: true,
+        snap: {
+          snapTo: (value) =>
+            panelEdges().reduce((closest, edge) =>
+              Math.abs(edge - value) < Math.abs(closest - value) ? edge : closest
+            ),
+          duration: 0.5,
+          ease: 'power1.inOut',
+        },
         onUpdate: (self) => {
           gsap.set(el, { x: -distance() * self.progress });
           onProgress?.(self.progress);
