@@ -24,7 +24,7 @@ export type SequenceConfig = {
 };
 
 export const HERO_SEQUENCE: SequenceConfig = {
-  frameCount: 100,
+  frameCount: 150,
   ext: 'webp',
   tiers: [
     { id: 'hero-1080', width: 1080, height: 608 },
