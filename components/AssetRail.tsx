@@ -16,7 +16,7 @@ import { useEffect, useState } from 'react';
  */
 const MENU = [
   { label: 'Home', href: '/', image: '/video/skyblue-poster.webp' },
-  { label: 'Team', href: '/team', image: '/residences/skyblue-3.webp' },
+  { label: 'Team', href: '/team', image: '/plate/team-menu.webp' },
   { label: 'News', href: '/news', image: '/residences/greater-3.webp' },
   { label: 'Masterplan', href: '/masterplan', image: '/plate/masterplan-menu.webp' },
 ];
