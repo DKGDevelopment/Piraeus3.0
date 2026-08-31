@@ -465,6 +465,25 @@ body {
 
 .team-film__back:hover { opacity: 1; }
 
+.team-film__sound {
+  position: absolute;
+  top: clamp(1.25rem, 3vw, 3rem);
+  right: clamp(1.25rem, 3vw, 3rem);
+  width: 2.6rem;
+  height: 2.6rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(244, 241, 236, 0.4);
+  border-radius: 50%;
+  background: rgba(11, 13, 14, 0.35);
+  color: var(--paper);
+  cursor: pointer;
+  transition: opacity 0.3s ease, background 0.3s ease;
+}
+
+.team-film__sound:hover { background: rgba(11, 13, 14, 0.55); }
+.team-film__sound svg { width: 1.15rem; height: 1.15rem; }
+
 .team-body {
   max-width: 46ch;
   margin: 0 auto;
@@ -479,6 +498,80 @@ body {
   font-size: clamp(0.95rem, 1.1vw, 1.05rem);
   line-height: 1.7;
   opacity: 0.85;
+}
+
+@media (min-width: 900px) {
+  .team-body {
+    max-width: 76ch;
+    columns: 2;
+    column-gap: 3.5rem;
+  }
+
+  .team-body__p {
+    break-inside: avoid;
+    margin-bottom: 0.2rem;
+  }
+}
+
+/* --- partners marquee --- */
+.marquee {
+  padding: clamp(2.5rem, 6vw, 5rem) 0 clamp(4rem, 10vw, 7rem);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.marquee__label {
+  margin: 0 clamp(1.5rem, 6vw, 3rem);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  opacity: 0.5;
+}
+
+.marquee__row {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+
+.marquee__track {
+  display: flex;
+  align-items: center;
+  gap: clamp(2rem, 5vw, 3.5rem);
+  width: max-content;
+}
+
+.marquee__row--right .marquee__track { animation: marquee-right 42s linear infinite; }
+.marquee__row--left .marquee__track { animation: marquee-left 42s linear infinite; }
+
+@keyframes marquee-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes marquee-right {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+
+.marquee__logo {
+  height: clamp(1.8rem, 3.2vw, 2.6rem);
+  width: auto;
+  flex: none;
+  filter: grayscale(1);
+  opacity: 0.45;
+  transition: opacity 0.3s ease;
+}
+
+.marquee__logo:hover { opacity: 0.85; }
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee__row--right .marquee__track,
+  .marquee__row--left .marquee__track {
+    animation: none;
+  }
 }
 
 /* --- asset approach --- */
