@@ -18,7 +18,7 @@ const MENU = [
   { label: 'Home', href: '/', image: '/video/skyblue-poster.webp' },
   { label: 'Team', href: '/team', image: '/residences/skyblue-3.webp' },
   { label: 'News', href: '/news', image: '/residences/greater-3.webp' },
-  { label: 'Masterplan', href: '/masterplan', image: '/plate/gate-1280.webp' },
+  { label: 'Masterplan', href: '/masterplan', image: '/plate/masterplan-menu.webp' },
 ];
 
 export default function AssetRail({ filled }: { filled: boolean }) {
