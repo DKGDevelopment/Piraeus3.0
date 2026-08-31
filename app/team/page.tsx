@@ -1,4 +1,5 @@
-import Link from 'next/link';
+import PartnersMarquee from '@/components/PartnersMarquee';
+import TeamFilm from '@/components/TeamFilm';
 
 export const metadata = { title: 'The Team — Piraeus Gate' };
 
@@ -11,25 +12,7 @@ const BODY = [
 export default function Page() {
   return (
     <main className="team">
-      <div className="team-film">
-        <video
-          className="team-film__video"
-          poster="/video/team-poster.webp"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-        >
-          <source src="/video/team-sm.webm" media="(max-width: 900px)" type="video/webm" />
-          <source src="/video/team-sm.mp4" media="(max-width: 900px)" type="video/mp4" />
-          <source src="/video/team.webm" type="video/webm" />
-          <source src="/video/team.mp4" type="video/mp4" />
-        </video>
-        <Link className="team-film__back" href="/">
-          Back to the masterplan
-        </Link>
-      </div>
+      <TeamFilm />
 
       <div className="team-body">
         {BODY.map((paragraph) => (
@@ -38,6 +21,8 @@ export default function Page() {
           </p>
         ))}
       </div>
+
+      <PartnersMarquee />
     </main>
   );
 }
