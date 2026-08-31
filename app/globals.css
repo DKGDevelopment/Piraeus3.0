@@ -536,7 +536,7 @@ body {
 .marquee__track {
   display: flex;
   align-items: center;
-  gap: clamp(5rem, 11vw, 8rem);
+  gap: clamp(2rem, 4.5vw, 3.5rem);
   width: max-content;
 }
 
