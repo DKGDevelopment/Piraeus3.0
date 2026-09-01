@@ -10,14 +10,10 @@ import { useEffect, useState } from 'react';
  * shot, then filled once the deck starts moving — by which point it is over
  * content rather than imagery, and needs its own ground to read against.
  */
-/**
- * Menu destinations. Imagery is drawn from what the site already has; Team and
- * News carry an interior each until they have pictures of their own.
- */
 const MENU = [
   { label: 'Home', href: '/', image: '/video/skyblue-poster.webp' },
   { label: 'Team', href: '/team', image: '/plate/team-menu.webp' },
-  { label: 'News', href: '/news', image: '/residences/greater-3.webp' },
+  { label: 'News', href: '/news', image: '/plate/news-menu.webp' },
   { label: 'Masterplan', href: '/masterplan', image: '/plate/masterplan-menu.webp' },
 ];
 
