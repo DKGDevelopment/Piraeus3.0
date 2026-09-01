@@ -1048,6 +1048,39 @@ body {
   color: inherit;
 }
 
+/* --- homepage menu button --- */
+.home-menu {
+  position: fixed;
+  top: clamp(1.25rem, 3vw, 2rem);
+  left: clamp(1.25rem, 3vw, 2rem);
+  z-index: 60;
+  font: inherit;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--paper);
+  background: rgba(11, 13, 14, 0.35);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(244, 241, 236, 0.5);
+  padding: 0.6rem 0.9rem;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: opacity 0.5s ease, visibility 0.5s ease, transform 0.5s ease, background 0.3s ease;
+}
+
+.home-menu--shown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.home-menu:hover {
+  background: rgba(11, 13, 14, 0.55);
+}
+
 .rail__menu,
 .rail__enquire {
   font: inherit;

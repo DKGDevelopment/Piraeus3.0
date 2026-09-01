@@ -9,6 +9,7 @@ import SequenceLayer from './SequenceLayer';
 import Intro from './Intro';
 import Stats from './Stats';
 import ScrollCue from './ScrollCue';
+import HomeMenuButton from './HomeMenuButton';
 import BuildingLabels from './BuildingLabels';
 import ChapterSpots from './ChapterSpots';
 import TurnCue from './TurnCue';
@@ -104,6 +105,7 @@ export default function Journey() {
       )}
 
       <ScrollCue shown={entered} leaving={scrolled} />
+      <HomeMenuButton shown={entered && progress >= 0.98} />
 
       <Stage length={TOTAL}>
         <SequenceLayer
