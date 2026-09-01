@@ -500,8 +500,21 @@ body {
   letter-spacing: -0.01em;
   font-size: clamp(0.98rem, 2.6vw, 2.08rem);
   line-height: 1.1;
+  /* Solid color as the no-JS/no-support fallback; the gradient below (with
+     background-clip: text) replaces it once the browser can render it, and
+     TeamBody scrubs background-position-y to fill it in top-down on scroll. */
   color: var(--ink);
-  opacity: 1;
+  background-image: linear-gradient(to bottom, var(--ink) 50%, #c9c3b8 50%);
+  background-size: 100% 200%;
+  background-position-y: 100%;
+}
+
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+  .team-body__p {
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
 }
 
 @media (min-width: 900px) {
