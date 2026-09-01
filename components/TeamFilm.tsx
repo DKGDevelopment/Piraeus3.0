@@ -3,6 +3,11 @@
 import Link from 'next/link';
 import { useRef, useState } from 'react';
 
+// Served from Bunny's CDN pull zone rather than /public: it's a single
+// higher-quality file the git repo shouldn't have to carry, and edge
+// delivery beats Vercel's static hosting for a ~60MB video.
+const SRC = 'https://piraeusgate.b-cdn.net/DKG%20FINAL%20VIDEO%20(1).mp4';
+
 /**
  * The team page's full-screen video, with a mute toggle — unlike the asset
  * films, this one carries a real audio track worth letting the visitor hear.
@@ -22,12 +27,8 @@ export default function TeamFilm() {
         loop
         playsInline
         preload="metadata"
-      >
-        <source src="/video/team-sm.webm" media="(max-width: 900px)" type="video/webm" />
-        <source src="/video/team-sm.mp4" media="(max-width: 900px)" type="video/mp4" />
-        <source src="/video/team.webm" type="video/webm" />
-        <source src="/video/team.mp4" type="video/mp4" />
-      </video>
+        src={SRC}
+      />
 
       <button
         type="button"

@@ -44,7 +44,7 @@ export default function TurnCue({ label, target, from, to, enter }: Props) {
           x: at.x,
           y: at.y,
           opacity,
-          pointerEvents: opacity > 0.6 ? 'auto' : 'none',
+          pointerEvents: opacity > 0.05 ? 'auto' : 'none',
           overwrite: 'auto',
         });
       };
