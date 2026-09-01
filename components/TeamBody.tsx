@@ -52,6 +52,16 @@ export default function TeamBody() {
           {paragraph}
         </p>
       ))}
+
+      <a
+        className="team-body__logo"
+        href="https://dkg-development.com/about"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Visit the DKG Development website"
+      >
+        <img src="/brand/dkg-development-logo.svg" alt="DKG Development" />
+      </a>
     </div>
   );
 }
