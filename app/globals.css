@@ -509,6 +509,21 @@ body {
   background-position-y: 100%;
 }
 
+.team-body__logo {
+  align-self: flex-end;
+  margin-top: 0.5rem;
+  opacity: 0.85;
+  transition: opacity 0.3s ease;
+}
+
+.team-body__logo:hover { opacity: 1; }
+
+.team-body__logo img {
+  display: block;
+  width: clamp(6rem, 11vw, 9.5rem);
+  height: auto;
+}
+
 @supports (background-clip: text) or (-webkit-background-clip: text) {
   .team-body__p {
     color: transparent;
