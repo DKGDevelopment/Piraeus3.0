@@ -6,7 +6,7 @@ import { useRef, useState } from 'react';
 // Served from Bunny's CDN pull zone rather than /public: it's a single
 // higher-quality file the git repo shouldn't have to carry, and edge
 // delivery beats Vercel's static hosting for a ~60MB video.
-const SRC = 'https://piraeusgate.b-cdn.net/DKG%20FINAL%20VIDEO%20(1).mp4';
+const SRC = 'https://piraeusgate.b-cdn.net/PIraeus%20Gate%20MIPIM25%20video-5.mp4';
 
 /**
  * The team page's full-screen video, with a mute toggle — unlike the asset
