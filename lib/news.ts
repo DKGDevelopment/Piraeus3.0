@@ -5,12 +5,16 @@ export type Outlet = {
   logo?: string;
 };
 
-export type Article = {
+export type Post = {
   id: string;
-  outlet: string;
-  description: string;
-  image: string;
+  title: string;
+  category: string;
+  /** ~16:10 or wider; object-fit: cover handles both the hero and grid use. */
+  coverImage: string;
   href: string;
+  /** Exactly two posts should carry this at a time — the featured block
+   * always wants a left card and a right card. */
+  featured: boolean;
 };
 
 /**
@@ -20,38 +24,44 @@ export type Article = {
  */
 export const OUTLETS: Outlet[] = [];
 
+export const CATEGORIES = ['Project Stories', 'Press Coverage'] as const;
+
 /**
  * PLACEHOLDER CONTENT. Stand-in entries so the page's design can be reviewed
- * before the real 21 articles (image, description, outlet, link) arrive —
- * swap this array once they do.
+ * before the real articles (title, category, image, link) arrive — swap
+ * this array once they do, keeping exactly two `featured: true`.
  */
-export const ARTICLES: Article[] = [
+export const POSTS: Post[] = [
   {
     id: 'placeholder-1',
-    outlet: 'Kathimerini',
-    description: 'A first look at the waterfront masterplan reshaping the port district of Piraeus.',
-    image: '/plate/masterplan-menu.webp',
+    title: 'A first look at the waterfront masterplan reshaping Piraeus',
+    category: 'Project Stories',
+    coverImage: '/plate/masterplan-menu.webp',
     href: '#',
+    featured: true,
   },
   {
     id: 'placeholder-2',
-    outlet: 'Ekathimerini',
-    description: 'DKG Development breaks ground on one of the largest mixed-use developments under construction in Greece.',
-    image: '/plate/team-menu.webp',
+    title: 'DKG Development breaks ground on Greece’s largest mixed-use development',
+    category: 'Press Coverage',
+    coverImage: '/plate/team-menu.webp',
     href: '#',
+    featured: true,
   },
   {
     id: 'placeholder-3',
-    outlet: 'Ναυτεμπορική',
-    description: 'Piraeus Gate brings 631 private residences and 268 serviced apartments to the city’s new gateway.',
-    image: '/plate/news-menu.webp',
+    title: 'Piraeus Gate brings 631 private residences to the city’s new gateway',
+    category: 'Project Stories',
+    coverImage: '/plate/news-menu.webp',
     href: '#',
+    featured: false,
   },
   {
     id: 'placeholder-4',
-    outlet: 'Real Estate News',
-    description: 'Inside the integrated development model behind Greece’s most active real estate portfolio.',
-    image: '/video/skyblue-poster.webp',
+    title: 'Inside the integrated development model behind Greece’s most active portfolio',
+    category: 'Press Coverage',
+    coverImage: '/video/skyblue-poster.webp',
     href: '#',
+    featured: false,
   },
 ];
