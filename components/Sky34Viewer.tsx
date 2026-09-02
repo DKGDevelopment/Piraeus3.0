@@ -74,7 +74,6 @@ export default function Sky34Viewer() {
   const [helpOpen, setHelpOpen] = useState(false);
   const [selectedFloor, setSelectedFloor] = useState('Ground');
   const [selectedApartment, setSelectedApartment] = useState('Apartment 01');
-  const [unitPanelOpen, setUnitPanelOpen] = useState(true);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const materialsRef = useRef<any[]>([]);
 
@@ -188,49 +187,72 @@ export default function Sky34Viewer() {
         </section>
 
         <div className="rail-rule" />
-        <section className="selection-panel" aria-label="Choose floor and apartment">
-          <div className="selection-heading">
-            <span>Navigate model</span>
-            <span className="selection-count">
-              {selectedFloor} · {selectedApartment.replace('Apartment ', 'A-')}
-            </span>
+
+        <section className="results-panel" aria-label="Units on the selected floor">
+          <div className="results-panel__header">
+            <div className="results-panel__title">
+              <span>{floorUnits.length} results</span>
+              <span className="selection-count">
+                {selectedFloor === 'Ground' ? 'Ground floor' : `Floor ${selectedFloor}`}
+              </span>
+            </div>
+            <div className="results-panel__tools">
+              <span className="results-sort">
+                Name: A-Z <span className="results-sort__chevron">⌄</span>
+              </span>
+              <span className="results-view">
+                <List size={14} />
+                <Grid2x2 size={14} />
+              </span>
+            </div>
           </div>
-          <label className="select-label" htmlFor="floor-select">
-            Floor
-          </label>
-          <select
-            id="floor-select"
-            className="native-select"
-            value={selectedFloor}
-            onChange={(event) => {
-              setSelectedFloor(event.target.value);
-              setUnitPanelOpen(true);
-            }}
-          >
-            {['Ground', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10'].map((floor) => (
-              <option key={floor} value={floor}>
-                {floor === 'Ground' ? 'Ground floor' : `Floor ${floor}`}
-              </option>
+
+          <ul className="results-list">
+            {floorUnits.map((unit) => (
+              <li className="result-card" key={unit.code}>
+                <div className="result-card__info">
+                  <div className="result-card__top">
+                    <span className="result-card__code">{unit.code}</span>
+                    <span className="result-card__status">To be confirmed</span>
+                  </div>
+                  <div className="result-card__stat">
+                    <span>Area</span>
+                    <strong>To be confirmed</strong>
+                  </div>
+                  <div className="result-card__stat">
+                    <span>Rooms</span>
+                    <strong>To be confirmed</strong>
+                  </div>
+                  <div className="result-card__stat">
+                    <span>Floor</span>
+                    <strong>{selectedFloor === 'Ground' ? 'Ground' : selectedFloor}</strong>
+                  </div>
+                </div>
+                <div className="result-card__plan" role="img" aria-label="Floor plan preview pending upload">
+                  <div className="plan-grid" />
+                  <div className="plan-outline">
+                    <span className="plan-door" />
+                  </div>
+                  <button
+                    type="button"
+                    className={`result-card__fav${favorites.has(unit.code) ? ' is-active' : ''}`}
+                    aria-label={favorites.has(unit.code) ? 'Remove from saved units' : 'Save unit'}
+                    aria-pressed={favorites.has(unit.code)}
+                    onClick={() =>
+                      setFavorites((current) => {
+                        const next = new Set(current);
+                        next.has(unit.code) ? next.delete(unit.code) : next.add(unit.code);
+                        return next;
+                      })
+                    }
+                  >
+                    <Heart size={14} fill={favorites.has(unit.code) ? 'currentColor' : 'none'} />
+                  </button>
+                </div>
+              </li>
             ))}
-          </select>
-          <label className="select-label" htmlFor="apartment-select">
-            Apartment
-          </label>
-          <select
-            id="apartment-select"
-            className="native-select"
-            value={selectedApartment}
-            onChange={(event) => {
-              setSelectedApartment(event.target.value);
-              setUnitPanelOpen(true);
-            }}
-          >
-            {['Apartment 01', 'Apartment 02', 'Apartment 03', 'Apartment 04'].map((apartment) => (
-              <option key={apartment} value={apartment}>
-                {apartment}
-              </option>
-            ))}
-          </select>
+          </ul>
+
           <div className="reference-legend" aria-label="Building-wide material legend">
             <span>
               <i className="legend-swatch facade" />
@@ -246,6 +268,7 @@ export default function Sky34Viewer() {
             </span>
           </div>
         </section>
+
         <section className="details-block" aria-label="Project details">
           <div className="detail-row">
             <span>Project</span>
@@ -331,10 +354,7 @@ export default function Sky34Viewer() {
                 data-position={position}
                 data-normal="0 0 1"
                 aria-label={floor === 'Ground' ? 'Ground floor' : `Floor ${floor}`}
-                onClick={() => {
-                  setSelectedFloor(floor);
-                  setUnitPanelOpen(true);
-                }}
+                onClick={() => setSelectedFloor(floor)}
               >
                 <span className="floor-hotspot__ring" />
               </button>
@@ -359,78 +379,6 @@ export default function Sky34Viewer() {
           </div>
           <i className="callout-color" />
         </div>
-
-        {unitPanelOpen && (
-          <aside className="results-panel" aria-label="Units on the selected floor">
-            <div className="results-panel__header">
-              <div className="results-panel__title">
-                <span>{floorUnits.length} results</span>
-                <button
-                  className="panel-close"
-                  onClick={() => setUnitPanelOpen(false)}
-                  aria-label="Close floor results"
-                >
-                  ×
-                </button>
-              </div>
-              <div className="results-panel__tools">
-                <span className="results-sort">
-                  Name: A-Z <span className="results-sort__chevron">⌄</span>
-                </span>
-                <span className="results-view">
-                  <List size={14} />
-                  <Grid2x2 size={14} />
-                </span>
-              </div>
-            </div>
-
-            <ul className="results-list">
-              {floorUnits.map((unit) => (
-                <li className="result-card" key={unit.code}>
-                  <div className="result-card__info">
-                    <div className="result-card__top">
-                      <span className="result-card__code">{unit.code}</span>
-                      <span className="result-card__status">To be confirmed</span>
-                    </div>
-                    <div className="result-card__stat">
-                      <span>Area</span>
-                      <strong>To be confirmed</strong>
-                    </div>
-                    <div className="result-card__stat">
-                      <span>Rooms</span>
-                      <strong>To be confirmed</strong>
-                    </div>
-                    <div className="result-card__stat">
-                      <span>Floor</span>
-                      <strong>{selectedFloor === 'Ground' ? 'Ground' : selectedFloor}</strong>
-                    </div>
-                  </div>
-                  <div className="result-card__plan" role="img" aria-label="Floor plan preview pending upload">
-                    <div className="plan-grid" />
-                    <div className="plan-outline">
-                      <span className="plan-door" />
-                    </div>
-                    <button
-                      type="button"
-                      className={`result-card__fav${favorites.has(unit.code) ? ' is-active' : ''}`}
-                      aria-label={favorites.has(unit.code) ? 'Remove from saved units' : 'Save unit'}
-                      aria-pressed={favorites.has(unit.code)}
-                      onClick={() =>
-                        setFavorites((current) => {
-                          const next = new Set(current);
-                          next.has(unit.code) ? next.delete(unit.code) : next.add(unit.code);
-                          return next;
-                        })
-                      }
-                    >
-                      <Heart size={14} fill={favorites.has(unit.code) ? 'currentColor' : 'none'} />
-                    </button>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </aside>
-        )}
 
         <div className="stage-controls">
           <div className="control-cluster">
