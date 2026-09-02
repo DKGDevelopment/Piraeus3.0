@@ -29,6 +29,8 @@ export type AssetPage = {
     body: string[];
   };
   residence?: Residence;
+  /** Link to a live interactive 3D model of the building, where one exists. */
+  viewer3d?: string;
   location?: {
     heading: string;
     copy: string;
@@ -85,6 +87,7 @@ export const ASSET_PAGES: Record<string, AssetPage> = {
       body: ETHOS,
     },
     residence: SKYWAY_RESIDENCES[0],
+    viewer3d: '/viewer/sky34',
     location: NEIGHBOURHOOD,
   },
 

@@ -1465,9 +1465,19 @@ button:hover .read-btn__arrow { opacity: 1; transform: translateX(0); }
   opacity: 0.78;
 }
 
+.res__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+
 .res__cta {
   align-self: flex-start;
-  margin-top: 1.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   padding: 0.85rem 1.6rem;
   border: 1px solid var(--ink);
   border-radius: 999px;
@@ -1477,10 +1487,27 @@ button:hover .read-btn__arrow { opacity: 1; transform: translateX(0); }
   text-transform: uppercase;
   color: var(--ink);
   text-decoration: none;
-  transition: background 0.3s ease, color 0.3s ease;
+  transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease;
 }
 
 .res__cta:hover { background: var(--ink); color: var(--cream); }
+
+.res__cta--3d {
+  background: var(--ink);
+  color: var(--cream);
+}
+
+.res__cta--3d svg {
+  width: 1rem;
+  height: 1rem;
+  flex: none;
+}
+
+.res__cta--3d:hover {
+  background: transparent;
+  color: var(--ink);
+  transform: translateY(-2px);
+}
 
 /* Pinned to the foot so the figure sits in the same place whatever the copy
    above it runs to. */
