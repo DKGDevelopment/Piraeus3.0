@@ -32,6 +32,14 @@ const MODEL_URL = '/sky34-viewer/assets/sky34-viewer.glb';
 const DUSK_TEXTURE = '/sky34-viewer/assets/sky34-dusk-texture.jpg';
 const POSTER_URL = '/sky34-viewer/assets/skyway-reference.webp';
 
+// The GLB's nodes are grouped by CAD layer (walls, glazing, balconies…), not
+// by floor, so there's no real per-floor mesh to select — this approximates
+// one with a translucent band positioned at the selected floor's estimated
+// height, derived from the model's overall bounding box rather than true
+// floor geometry.
+const FLOOR_COUNT = 11; // Ground + 01–10, matching SKY34_FLOORS.
+const FLOOR_LABELS = ['Ground', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10'];
+
 /**
  * The Sky34 interactive 3D viewer, built by Manus and handed off as a
  * standalone Next.js-compatible client component (see
@@ -54,6 +62,9 @@ export default function Sky34Viewer() {
   const [unitPanelOpen, setUnitPanelOpen] = useState(true);
   const [requestSent, setRequestSent] = useState(false);
   const materialsRef = useRef<any[]>([]);
+  const [bounds, setBounds] = useState<{ center: { x: number; y: number; z: number }; height: number } | null>(
+    null
+  );
 
   // The custom element touches browser globals as soon as its module
   // evaluates, which breaks static prerendering if imported at module scope
@@ -67,6 +78,9 @@ export default function Sky34Viewer() {
     if (!viewer) return;
     const onLoad = () => {
       setLoaded(true);
+      const center = viewer.getBoundingBoxCenter?.();
+      const dims = viewer.getDimensions?.();
+      if (center && dims) setBounds({ center, height: dims.y });
       const materials = viewer.model?.materials ?? [];
       materialsRef.current = materials;
       materials.forEach((material: any) => {
@@ -293,7 +307,24 @@ export default function Sky34Viewer() {
             interaction-prompt="auto"
             loading="eager"
             poster={POSTER_URL}
-          />
+          >
+            {bounds && (
+              <button
+                key={selectedFloor}
+                type="button"
+                slot="hotspot-floor"
+                className="floor-hotspot"
+                data-position={`${bounds.center.x} ${
+                  bounds.center.y -
+                  bounds.height / 2 +
+                  (FLOOR_LABELS.indexOf(selectedFloor) + 0.5) * (bounds.height / FLOOR_COUNT)
+                } ${bounds.center.z}`}
+                data-normal="0 1 0"
+                aria-hidden="true"
+                tabIndex={-1}
+              />
+            )}
+          </model-viewer>
           {!loaded && (
             <div className="model-loading">
               <span className="loading-ring" />
