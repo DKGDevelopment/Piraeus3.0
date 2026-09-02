@@ -32,6 +32,29 @@ const MODEL_URL = '/sky34-viewer/assets/sky34-viewer.glb';
 const DUSK_TEXTURE = '/sky34-viewer/assets/sky34-dusk-texture.jpg';
 const POSTER_URL = '/sky34-viewer/assets/skyway-reference.webp';
 
+// The GLB's nodes are grouped by CAD layer (walls, glazing, balconies…), not
+// by floor, so there's no per-floor mesh to select or recolour. Instead each
+// floor gets a real clickable point on the model's surface, calibrated from
+// a screenshot the user marked up: for each marked pixel, a headless
+// instance of this same page at the same default camera state called
+// model-viewer's own positionAndNormalFromPoint(x, y) — its public
+// raycasting API — to get the actual 3D point on the mesh, at the same
+// camera-orbit this component sets on mount for Ground/Apartment 01. Floor
+// 10 wasn't marked (cropped out of the screenshot) so it has no hotspot yet,
+// though it's still reachable from the floor dropdown.
+const FLOOR_HOTSPOTS: { floor: string; position: string }[] = [
+  { floor: 'Ground', position: '-4.856 6.711 14.7' },
+  { floor: '01', position: '-3.063 10.167 15.5' },
+  { floor: '02', position: '-6.08 12.825 14.7' },
+  { floor: '03', position: '-7.541 15.304 14.7' },
+  { floor: '04', position: '-10.915 19.194 14.888' },
+  { floor: '05', position: '-9.472 22.681 16.637' },
+  { floor: '06', position: '-10.91 25.018 14.823' },
+  { floor: '07', position: '-9.696 28.3 16.655' },
+  { floor: '08', position: '-10.623 31.332 15.046' },
+  { floor: '09', position: '-10.005 34.33 16.083' },
+];
+
 /**
  * The Sky34 interactive 3D viewer, built by Manus and handed off as a
  * standalone Next.js-compatible client component (see
@@ -293,7 +316,25 @@ export default function Sky34Viewer() {
             interaction-prompt="auto"
             loading="eager"
             poster={POSTER_URL}
-          />
+          >
+            {FLOOR_HOTSPOTS.map(({ floor, position }) => (
+              <button
+                key={floor}
+                type="button"
+                slot={`hotspot-floor-${floor}`}
+                className={`floor-hotspot${floor === selectedFloor ? ' is-active' : ''}`}
+                data-position={position}
+                data-normal="0 0 1"
+                aria-label={floor === 'Ground' ? 'Ground floor' : `Floor ${floor}`}
+                onClick={() => {
+                  setSelectedFloor(floor);
+                  setUnitPanelOpen(true);
+                }}
+              >
+                <span className="floor-hotspot__ring" />
+              </button>
+            ))}
+          </model-viewer>
           {!loaded && (
             <div className="model-loading">
               <span className="loading-ring" />
