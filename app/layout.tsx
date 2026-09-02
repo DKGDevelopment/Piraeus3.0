@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { DM_Sans, Inter, JetBrains_Mono } from 'next/font/google';
+import { DM_Sans, DM_Serif_Display, Inter, JetBrains_Mono, Manrope } from 'next/font/google';
 import SmoothScroll from '@/components/SmoothScroll';
 import './globals.css';
 
@@ -31,6 +31,22 @@ const jetbrainsMono = JetBrains_Mono({
   variable: '--font-mono',
 });
 
+// The Sky34 3D viewer's own "Coastal Concrete Editorial" type pairing —
+// scoped to that page's CSS, not used anywhere else on the site.
+const manrope = Manrope({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+  variable: '--font-manrope',
+});
+
+const dmSerifDisplay = DM_Serif_Display({
+  subsets: ['latin'],
+  weight: '400',
+  display: 'swap',
+  variable: '--font-dm-serif',
+});
+
 export const metadata: Metadata = {
   title: 'Piraeus Masterplan',
   description: 'An urban redevelopment masterplan for the Piraeus waterfront.',
@@ -38,7 +54,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${dmSans.variable} ${jetbrainsMono.variable}`}>
+    <html
+      lang="en"
+      className={`${inter.variable} ${dmSans.variable} ${jetbrainsMono.variable} ${manrope.variable} ${dmSerifDisplay.variable}`}
+    >
       <body>
         <SmoothScroll>{children}</SmoothScroll>
       </body>

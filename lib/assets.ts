@@ -87,7 +87,7 @@ export const ASSET_PAGES: Record<string, AssetPage> = {
       body: ETHOS,
     },
     residence: SKYWAY_RESIDENCES[0],
-    viewer3d: 'https://sky34view-beza6cmq.manus.space/',
+    viewer3d: '/viewer/sky34',
     location: NEIGHBOURHOOD,
   },
 
