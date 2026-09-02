@@ -1807,16 +1807,19 @@ button:hover .read-btn__arrow { opacity: 1; transform: translateX(0); }
   border: 2px solid var(--cream);
   border-radius: 50% 50% 50% 4px;
   transform: rotate(-45deg);
-  background: var(--ink);
+  /* A warm, saturated accent reads against any map style — roads, parks,
+     water — where the site's near-black previously blended into darker
+     tiles. */
+  background: #e0552e;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(11, 13, 14, 0.35);
+  box-shadow: 0 2px 8px rgba(11, 13, 14, 0.45);
   transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), background 0.25s ease;
 }
 
 .pin:hover { transform: rotate(-45deg) scale(1.12); }
 
 .pin--active {
-  background: #8a6a3b;
+  background: var(--ink);
   transform: rotate(-45deg) scale(1.28);
 }
 
