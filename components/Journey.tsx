@@ -47,6 +47,7 @@ export default function Journey() {
   const [progress, setProgress] = useState(0);
   const [ready, setReady] = useState(false);
   const [entered, setEntered] = useState(false);
+  const [completedOnce, setCompletedOnce] = useState(false);
 
   const handleProgress = useCallback((p: number) => setProgress(p), []);
   const handleReady = useCallback(() => setReady(true), []);
@@ -75,6 +76,7 @@ export default function Journey() {
       trigger: tail.current,
       start: 'top 55%',
       onEnter: () => {
+        setCompletedOnce(true);
         gsap
           .timeline()
           .to(veil.current, { autoAlpha: 1, duration: 0.32, ease: 'power2.in' })
@@ -105,7 +107,7 @@ export default function Journey() {
       )}
 
       <ScrollCue shown={entered} leaving={scrolled} />
-      <HomeMenuButton shown={entered && progress >= 0.98} />
+      <HomeMenuButton shown={completedOnce} />
 
       <Stage length={TOTAL}>
         <SequenceLayer

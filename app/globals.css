@@ -2063,39 +2063,35 @@ button:hover .read-btn__arrow { opacity: 1; transform: translateX(0); }
 }
 
 .tile {
-  position: relative;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
   text-decoration: none;
-  color: var(--paper);
+  color: var(--ink);
+}
+
+.tile__label {
+  flex: none;
+  padding: clamp(0.75rem, 1.4vw, 1.25rem) 0;
+  font-size: clamp(1rem, 1.6vw, 1.5rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
 }
 
 .tile__img {
-  position: absolute;
-  inset: 0;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
   background-size: cover;
   background-position: center;
-  /* Held slightly dark so the label reads over any of the images. */
-  filter: brightness(0.72);
   transform: scale(1.02);
   transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s ease;
 }
 
 .tile:hover .tile__img {
   transform: scale(1.06);
-  filter: brightness(0.85);
-}
-
-.tile__label {
-  position: absolute;
-  top: clamp(1rem, 2vw, 1.75rem);
-  left: clamp(1rem, 2vw, 1.75rem);
-  right: clamp(1rem, 2vw, 1.75rem);
-  font-size: clamp(1.1rem, 1.9vw, 1.9rem);
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
-  line-height: 1.02;
-  text-shadow: 0 1px 3px rgba(11, 13, 14, 0.6), 0 2px 20px rgba(11, 13, 14, 0.5);
 }
 
 /* Stacked rather than side by side, where four columns would be slivers. */

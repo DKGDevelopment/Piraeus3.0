@@ -50,8 +50,8 @@ export default function SiteMenu({ open, onClose }: { open: boolean; onClose: ()
       <nav className="menu__tiles">
         {MENU.map((item) => (
           <Link key={item.href} href={item.href} className="tile" onClick={onClose}>
-            <span className="tile__img" style={{ backgroundImage: `url(${item.image})` }} />
             <span className="tile__label">{item.label}</span>
+            <span className="tile__img" style={{ backgroundImage: `url(${item.image})` }} />
           </Link>
         ))}
       </nav>
