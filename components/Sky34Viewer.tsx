@@ -73,15 +73,22 @@ export default function Sky34Viewer() {
         const name = material.name.toUpperCase();
         const pbr = material.pbrMetallicRoughness;
         if (!pbr) return;
+        // Facade previously rendered as a near-black brown, which read as one
+        // flat mass rather than a building — the doc's own material table
+        // calls it "warm sand/limestone", so it needed to actually be light.
+        // Pool is now teal rather than a second navy, so it doesn't read as
+        // more glazing; the neutral fallback (recesses, undersides) is a
+        // warm mid-gray instead of near-black, so those surfaces still hold
+        // a hair of light rather than disappearing into shadow.
         const color: [number, number, number, number] = name.includes('GLASS')
           ? [0.035, 0.18, 0.42, 1]
           : name.includes('POOL')
-            ? [0.01, 0.26, 0.5, 1]
+            ? [0.02, 0.32, 0.34, 1]
             : name.includes('LIGHT')
               ? [0.92, 0.32, 0.06, 1]
               : name.includes('WARM WHITE FACADE')
-                ? [0.23, 0.15, 0.085, 1]
-                : [0.12, 0.09, 0.07, 1];
+                ? [0.62, 0.53, 0.4, 1]
+                : [0.32, 0.28, 0.24, 1];
         pbr.setBaseColorFactor(color);
         pbr.setMetallicFactor(name.includes('GLASS') ? 0.28 : 0.02);
         pbr.setRoughnessFactor(name.includes('GLASS') ? 0.12 : 0.56);
