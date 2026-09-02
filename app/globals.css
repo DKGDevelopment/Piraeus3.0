@@ -1064,11 +1064,20 @@ body {
   backdrop-filter: blur(6px);
   border: 1px solid rgba(244, 241, 236, 0.5);
   padding: 0.6rem 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
   cursor: pointer;
   opacity: 0;
   visibility: hidden;
   transform: translateY(-6px);
   transition: opacity 0.5s ease, visibility 0.5s ease, transform 0.5s ease, background 0.3s ease;
+}
+
+.home-menu__icon {
+  width: 1rem;
+  height: 1rem;
+  flex: none;
 }
 
 .home-menu--shown {

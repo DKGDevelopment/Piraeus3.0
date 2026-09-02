@@ -24,6 +24,9 @@ export default function HomeMenuButton({ shown }: { shown: boolean }) {
         onClick={() => setOpen(true)}
         aria-expanded={open}
       >
+        <svg className="home-menu__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+        </svg>
         Menu
       </button>
       <SiteMenu open={open} onClose={() => setOpen(false)} />
