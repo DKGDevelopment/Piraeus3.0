@@ -18,7 +18,14 @@ const BANDS = 20;
  * the old one. A crossfade would just dissolve two interiors into mush — this
  * keeps both readable throughout.
  */
-export default function Residences({ residence }: { residence: Residence }) {
+export default function Residences({
+  residence,
+  viewer3dHref,
+}: {
+  residence: Residence;
+  /** Link to a live interactive 3D model of the building, where one exists. */
+  viewer3dHref?: string;
+}) {
   const [active, setActive] = useState(0);
   // What the base layer is showing: the wipe lands on top of it, then becomes it.
   const [settled, setSettled] = useState(0);
@@ -153,9 +160,26 @@ export default function Residences({ residence }: { residence: Residence }) {
         <h2 className="res__name">{residence.name}</h2>
         <p className="res__copy">{residence.description}</p>
 
-        <a className="res__cta" href="/contact">
-          Book a visit
-        </a>
+        <div className="res__ctas">
+          <a className="res__cta" href="/contact">
+            Book a visit
+          </a>
+
+          {viewer3dHref && (
+            <a className="res__cta res__cta--3d" href={viewer3dHref} target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M12 2.5 20.5 7v10L12 21.5 3.5 17V7L12 2.5Z"
+                  stroke="currentColor"
+                  strokeWidth="1.4"
+                  strokeLinejoin="round"
+                />
+                <path d="M12 21.5V12M12 12 3.7 7.25M12 12l8.3-4.75" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
+              </svg>
+              3D View
+            </a>
+          )}
+        </div>
 
         {/* One figure for the residence, not per room: the area given is the
             whole apartment, and inventing a breakdown would be fiction. */}

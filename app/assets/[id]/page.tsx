@@ -86,7 +86,7 @@ export default async function AssetPage({
 
         {page.residence && (
           <section className="panel panel--res">
-            <Residences residence={page.residence} />
+            <Residences residence={page.residence} viewer3dHref={page.viewer3d} />
           </section>
         )}
 
