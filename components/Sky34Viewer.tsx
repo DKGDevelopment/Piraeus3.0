@@ -2,7 +2,7 @@
 
 import './Sky34Viewer.css';
 import { useEffect, useRef, useState } from 'react';
-import { Maximize2, Mouse, RotateCcw, Ruler, SunMedium, ZoomIn } from 'lucide-react';
+import { Grid2x2, Heart, List, Maximize2, Mouse, RotateCcw, Ruler, SunMedium, ZoomIn } from 'lucide-react';
 
 declare global {
   namespace React {
@@ -75,8 +75,17 @@ export default function Sky34Viewer() {
   const [selectedFloor, setSelectedFloor] = useState('Ground');
   const [selectedApartment, setSelectedApartment] = useState('Apartment 01');
   const [unitPanelOpen, setUnitPanelOpen] = useState(true);
-  const [requestSent, setRequestSent] = useState(false);
+  const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const materialsRef = useRef<any[]>([]);
+
+  // Unit codes follow floor-number + two-digit position (e.g. floor 5's
+  // second unit is "502"; ground floor's first is "001") — a systematic
+  // placeholder, not real unit numbering, until an approved schedule exists.
+  const floorNum = selectedFloor === 'Ground' ? 0 : Number(selectedFloor);
+  const floorUnits = [1, 2, 3, 4].map((i) => ({
+    code: `${floorNum}${String(i).padStart(2, '0')}`,
+    apartment: `Apartment ${String(i).padStart(2, '0')}`,
+  }));
 
   // The custom element touches browser globals as soon as its module
   // evaluates, which breaks static prerendering if imported at module scope
@@ -165,12 +174,9 @@ export default function Sky34Viewer() {
           <span className="status-dot" />
         </div>
         <div className="brand-lockup">
-          <span className="monogram-frame">
-            <img src="/sky34-viewer/assets/sky34-logo.png" alt="Sky34 S34 monogram" className="brand-mark" />
-          </span>
-          <span className="brand-wordmark">SKY34</span>
+          <span className="brand-wordmark">SKYWAY</span>
         </div>
-        <div className="vertical-stamp">SKY34 / ATHENS</div>
+        <div className="vertical-stamp">SKYWAY / ATHENS</div>
         <section className="project-intro">
           <p className="kicker">Residence 01 · 2026 · Skyway palette</p>
           <h1>
@@ -178,7 +184,7 @@ export default function Sky34Viewer() {
             <br />
             <em>Read the silhouette.</em>
           </h1>
-          <p className="lede">An interactive study of the terraces, glazing, and planted edges that define Sky34.</p>
+          <p className="lede">An interactive study of the terraces, glazing, and planted edges that define Skyway.</p>
         </section>
 
         <div className="rail-rule" />
@@ -216,7 +222,6 @@ export default function Sky34Viewer() {
             value={selectedApartment}
             onChange={(event) => {
               setSelectedApartment(event.target.value);
-              setRequestSent(false);
               setUnitPanelOpen(true);
             }}
           >
@@ -244,7 +249,7 @@ export default function Sky34Viewer() {
         <section className="details-block" aria-label="Project details">
           <div className="detail-row">
             <span>Project</span>
-            <strong>Sky34</strong>
+            <strong>Skyway</strong>
           </div>
           <div className="detail-row">
             <span>Typology</span>
@@ -305,7 +310,7 @@ export default function Sky34Viewer() {
           <model-viewer
             ref={viewerRef as React.RefObject<HTMLElement>}
             src={MODEL_URL}
-            alt="Interactive 3D model of the Sky34 residence"
+            alt="Interactive 3D model of the Skyway residence"
             camera-controls
             touch-action="pan-y"
             shadow-intensity="1.15"
@@ -356,52 +361,74 @@ export default function Sky34Viewer() {
         </div>
 
         {unitPanelOpen && (
-          <aside className="unit-panel" aria-label="Selected apartment information">
-            <div className="unit-panel-header">
-              <div>
-                <span className="callout-label">Unit dossier</span>
-                <h2>{selectedApartment}</h2>
+          <aside className="results-panel" aria-label="Units on the selected floor">
+            <div className="results-panel__header">
+              <div className="results-panel__title">
+                <span>{floorUnits.length} results</span>
+                <button
+                  className="panel-close"
+                  onClick={() => setUnitPanelOpen(false)}
+                  aria-label="Close floor results"
+                >
+                  ×
+                </button>
               </div>
-              <button className="panel-close" onClick={() => setUnitPanelOpen(false)} aria-label="Close unit details">
-                ×
-              </button>
-            </div>
-            <div className="unit-plan" role="img" aria-label="Floor plan preview pending upload">
-              <div className="plan-grid" />
-              <div className="plan-outline">
-                <span className="plan-room room-a">LIVING / DINING</span>
-                <span className="plan-room room-b">BEDROOM</span>
-                <span className="plan-room room-c">TERRACE</span>
-                <span className="plan-door" />
-              </div>
-              <span className="plan-caption">Floor plan preview · pending upload</span>
-            </div>
-            <div className="unit-meta">
-              <div>
-                <span>Level</span>
-                <strong>{selectedFloor === 'Ground' ? 'Ground floor' : `Floor ${selectedFloor}`}</strong>
-              </div>
-              <div>
-                <span>Aspect</span>
-                <strong>To be confirmed</strong>
-              </div>
-              <div>
-                <span>Area</span>
-                <strong>To be confirmed</strong>
-              </div>
-              <div>
-                <span>Rooms</span>
-                <strong>To be confirmed</strong>
+              <div className="results-panel__tools">
+                <span className="results-sort">
+                  Name: A-Z <span className="results-sort__chevron">⌄</span>
+                </span>
+                <span className="results-view">
+                  <List size={14} />
+                  <Grid2x2 size={14} />
+                </span>
               </div>
             </div>
-            <p className="unit-note">
-              Upload the approved plan and unit schedule to replace the pending fields with verified apartment
-              information.
-            </p>
-            <button className="request-button" onClick={() => setRequestSent(true)}>
-              {requestSent ? 'Request noted' : 'Request unit details'}
-              <span>↗</span>
-            </button>
+
+            <ul className="results-list">
+              {floorUnits.map((unit) => (
+                <li className="result-card" key={unit.code}>
+                  <div className="result-card__info">
+                    <div className="result-card__top">
+                      <span className="result-card__code">{unit.code}</span>
+                      <span className="result-card__status">To be confirmed</span>
+                    </div>
+                    <div className="result-card__stat">
+                      <span>Area</span>
+                      <strong>To be confirmed</strong>
+                    </div>
+                    <div className="result-card__stat">
+                      <span>Rooms</span>
+                      <strong>To be confirmed</strong>
+                    </div>
+                    <div className="result-card__stat">
+                      <span>Floor</span>
+                      <strong>{selectedFloor === 'Ground' ? 'Ground' : selectedFloor}</strong>
+                    </div>
+                  </div>
+                  <div className="result-card__plan" role="img" aria-label="Floor plan preview pending upload">
+                    <div className="plan-grid" />
+                    <div className="plan-outline">
+                      <span className="plan-door" />
+                    </div>
+                    <button
+                      type="button"
+                      className={`result-card__fav${favorites.has(unit.code) ? ' is-active' : ''}`}
+                      aria-label={favorites.has(unit.code) ? 'Remove from saved units' : 'Save unit'}
+                      aria-pressed={favorites.has(unit.code)}
+                      onClick={() =>
+                        setFavorites((current) => {
+                          const next = new Set(current);
+                          next.has(unit.code) ? next.delete(unit.code) : next.add(unit.code);
+                          return next;
+                        })
+                      }
+                    >
+                      <Heart size={14} fill={favorites.has(unit.code) ? 'currentColor' : 'none'} />
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
           </aside>
         )}
 
