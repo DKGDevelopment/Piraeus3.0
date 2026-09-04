@@ -76,8 +76,28 @@ export default function VideoSequenceLayer({
       let duration = 0;
       let lastSetTime = -1;
 
+      // Some WebM muxes omit a duration header, leaving video.duration as
+      // Infinity (truthy, so an unguarded check on it silently breaks
+      // seeking) until playback has reached the end once. Forcing a seek
+      // near the end makes the browser compute the real duration, reported
+      // through 'durationchange'; we then return to the start.
+      const onDurationChange = () => {
+        if (Number.isFinite(video.duration) && video.duration > 0 && video.duration !== duration) {
+          duration = video.duration;
+          // The forced seek used to discover the duration left currentTime
+          // near the end; snap back to wherever the scroll playhead actually is.
+          const t = lastLocal.current * duration;
+          video.currentTime = t;
+          lastSetTime = t;
+        }
+      };
+
       const onLoadedMetadata = () => {
-        duration = video.duration || 0;
+        if (Number.isFinite(video.duration) && video.duration > 0) {
+          duration = video.duration;
+        } else {
+          video.currentTime = 1e101;
+        }
       };
 
       const updateBuffered = () => {
@@ -91,6 +111,7 @@ export default function VideoSequenceLayer({
       };
 
       video.addEventListener('loadedmetadata', onLoadedMetadata);
+      video.addEventListener('durationchange', onDurationChange);
       video.addEventListener('progress', updateBuffered);
       video.addEventListener('canplaythrough', updateBuffered);
 
@@ -103,7 +124,7 @@ export default function VideoSequenceLayer({
         const inside = travelled >= offset && travelled <= offset + length;
         gsap.set(root.current, { autoAlpha: inside ? 1 : 0 });
 
-        if (duration) {
+        if (duration > 0 && Number.isFinite(duration)) {
           const t = p * duration;
           // Skip redundant seeks below a frame's worth of movement — every
           // write to currentTime is a potential network fetch on remote video.
@@ -121,6 +142,7 @@ export default function VideoSequenceLayer({
       return () => {
         unsubscribe?.();
         video.removeEventListener('loadedmetadata', onLoadedMetadata);
+        video.removeEventListener('durationchange', onDurationChange);
         video.removeEventListener('progress', updateBuffered);
         video.removeEventListener('canplaythrough', updateBuffered);
       };
