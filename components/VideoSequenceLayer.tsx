@@ -81,21 +81,16 @@ export default function VideoSequenceLayer({
       // seeking) until playback has reached the end once. Forcing a seek
       // near the end makes the browser compute the real duration, reported
       // through 'durationchange'; we then return to the start.
-      const onDurationChange = () => {
+      const resolveDuration = () => {
         if (Number.isFinite(video.duration) && video.duration > 0 && video.duration !== duration) {
           duration = video.duration;
-          // The forced seek used to discover the duration left currentTime
-          // near the end; snap back to wherever the scroll playhead actually is.
+          // A forced seek used to discover the duration (or one made before
+          // this ran) may have left currentTime away from the playhead;
+          // snap back to wherever the scroll position actually is.
           const t = lastLocal.current * duration;
           video.currentTime = t;
           lastSetTime = t;
-        }
-      };
-
-      const onLoadedMetadata = () => {
-        if (Number.isFinite(video.duration) && video.duration > 0) {
-          duration = video.duration;
-        } else {
+        } else if (video.readyState >= 1 && !Number.isFinite(video.duration)) {
           video.currentTime = 1e101;
         }
       };
@@ -110,10 +105,19 @@ export default function VideoSequenceLayer({
         }
       };
 
-      video.addEventListener('loadedmetadata', onLoadedMetadata);
-      video.addEventListener('durationchange', onDurationChange);
+      video.addEventListener('loadedmetadata', resolveDuration);
+      video.addEventListener('durationchange', resolveDuration);
       video.addEventListener('progress', updateBuffered);
       video.addEventListener('canplaythrough', updateBuffered);
+
+      // The video can already have metadata and buffered data by the time
+      // this effect runs — a cached response, a fast CDN edge, or simply
+      // React getting to this effect after the browser already fired the
+      // events above. Those events don't replay for a listener attached
+      // late, so the element's current state has to be checked directly too,
+      // or a fast-loading video permanently gets stuck unscrubbable.
+      resolveDuration();
+      updateBuffered();
 
       const onStage = (travelled: number) => {
         const p = gsap.utils.clamp(0, 1, (travelled - offset) / length);
@@ -141,8 +145,8 @@ export default function VideoSequenceLayer({
 
       return () => {
         unsubscribe?.();
-        video.removeEventListener('loadedmetadata', onLoadedMetadata);
-        video.removeEventListener('durationchange', onDurationChange);
+        video.removeEventListener('loadedmetadata', resolveDuration);
+        video.removeEventListener('durationchange', resolveDuration);
         video.removeEventListener('progress', updateBuffered);
         video.removeEventListener('canplaythrough', updateBuffered);
       };
