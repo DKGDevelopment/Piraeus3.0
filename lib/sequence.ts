@@ -23,14 +23,15 @@ export type SequenceConfig = {
   tiers: SequenceTier[];
 };
 
-export const HERO_SEQUENCE: SequenceConfig = {
-  frameCount: 142,
-  ext: 'webp',
-  tiers: [
-    { id: 'hero-1080', width: 1080, height: 608 },
-    { id: 'hero-1920', width: 1920, height: 1080 },
-    { id: 'hero-2560', width: 2560, height: 1440 },
-  ],
+/**
+ * The descent chapter is a single Bunny CDN video, scrubbed by seeking
+ * currentTime instead of drawing an image sequence — see VideoSequenceLayer.
+ * Encode: 3840x2160, CBR, 30fps.
+ */
+export const HERO_VIDEO = {
+  src: 'https://piraeusgate.b-cdn.net/Piraeus%20Gate%20Sequence%201.webm',
+  width: 3840,
+  height: 2160,
 };
 
 /**
