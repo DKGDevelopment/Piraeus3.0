@@ -75,6 +75,30 @@ export default function VideoSequenceLayer({
       const video = videoRef.current!;
       let duration = 0;
       let lastSetTime = -1;
+      // While a seek is decoding, further scroll ticks would otherwise queue
+      // up more seeks behind it — the video then visibly lags and has to
+      // catch up through a backlog of stale targets. Instead, only the most
+      // recent target during a seek is kept, applied once that seek settles,
+      // so the video always converges on wherever scroll actually is now.
+      let pendingTime: number | null = null;
+
+      const seekTo = (t: number) => {
+        if (video.seeking) {
+          pendingTime = t;
+          return;
+        }
+        video.currentTime = t;
+        lastSetTime = t;
+      };
+
+      const onSeeked = () => {
+        if (pendingTime !== null) {
+          const t = pendingTime;
+          pendingTime = null;
+          seekTo(t);
+        }
+      };
+      video.addEventListener('seeked', onSeeked);
 
       // Some WebM muxes omit a duration header, leaving video.duration as
       // Infinity (truthy, so an unguarded check on it silently breaks
@@ -87,9 +111,7 @@ export default function VideoSequenceLayer({
           // A forced seek used to discover the duration (or one made before
           // this ran) may have left currentTime away from the playhead;
           // snap back to wherever the scroll position actually is.
-          const t = lastLocal.current * duration;
-          video.currentTime = t;
-          lastSetTime = t;
+          seekTo(lastLocal.current * duration);
         } else if (video.readyState >= 1 && !Number.isFinite(video.duration)) {
           video.currentTime = 1e101;
         }
@@ -133,8 +155,7 @@ export default function VideoSequenceLayer({
           // Skip redundant seeks below a frame's worth of movement — every
           // write to currentTime is a potential network fetch on remote video.
           if (Math.abs(t - lastSetTime) > 1 / 60) {
-            video.currentTime = t;
-            lastSetTime = t;
+            seekTo(t);
           }
         }
 
@@ -149,6 +170,7 @@ export default function VideoSequenceLayer({
         video.removeEventListener('durationchange', resolveDuration);
         video.removeEventListener('progress', updateBuffered);
         video.removeEventListener('canplaythrough', updateBuffered);
+        video.removeEventListener('seeked', onSeeked);
       };
     },
     { scope: root, dependencies: [stage, offset, length] }
