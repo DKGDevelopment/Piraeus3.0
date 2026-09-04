@@ -6,6 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import Stage from './Stage';
 import SequenceLayer from './SequenceLayer';
+import VideoSequenceLayer from './VideoSequenceLayer';
 import Intro from './Intro';
 import Stats from './Stats';
 import ScrollCue from './ScrollCue';
@@ -14,13 +15,12 @@ import BuildingLabels from './BuildingLabels';
 import ChapterSpots from './ChapterSpots';
 import TurnCue from './TurnCue';
 import {
-  HERO_SEQUENCE,
+  HERO_VIDEO,
   STREET_SEQUENCE,
   COURT_SEQUENCE,
   LANE_SEQUENCE,
 } from '@/lib/sequence';
 import { COURT_SPOTS, LANE_SPOTS } from '@/lib/buildings';
-import { FRAMES_TO_START } from '@/lib/useImageSequence';
 import { jumpToY, lockScroll, unlockScroll } from '@/lib/lenis';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -99,19 +99,17 @@ export default function Journey() {
   return (
     <>
       {!entered && (
-        <Intro
-          progress={Math.min(1, (progress * HERO_SEQUENCE.frameCount) / FRAMES_TO_START)}
-          armed={ready}
-          onEnter={handleEnter}
-        />
+        <Intro progress={progress} armed={ready} onEnter={handleEnter} />
       )}
 
       <ScrollCue shown={entered} leaving={scrolled} />
       <HomeMenuButton shown={completedOnce} />
 
       <Stage length={TOTAL}>
-        <SequenceLayer
-          config={HERO_SEQUENCE}
+        <VideoSequenceLayer
+          src={HERO_VIDEO.src}
+          width={HERO_VIDEO.width}
+          height={HERO_VIDEO.height}
           offset={0}
           length={DESCENT}
           onProgress={handleProgress}
@@ -124,7 +122,7 @@ export default function Journey() {
             </h1>
             {entered && <Stats />}
             </div>
-        </SequenceLayer>
+        </VideoSequenceLayer>
 
         <SequenceLayer config={STREET_SEQUENCE} offset={STREET_AT} length={STREET}>
           <TurnCue
