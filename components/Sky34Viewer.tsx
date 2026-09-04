@@ -28,32 +28,51 @@ declare global {
   }
 }
 
-const MODEL_URL = '/sky34-viewer/assets/sky34-viewer.glb';
+const MODEL_URL = '/sky34-viewer/assets/skyway-floors.glb';
 const DUSK_TEXTURE = '/sky34-viewer/assets/sky34-dusk-texture.jpg';
 const POSTER_URL = '/sky34-viewer/assets/skyway-reference.webp';
 
-// The GLB's nodes are grouped by CAD layer (walls, glazing, balconies…), not
-// by floor, so there's no per-floor mesh to select or recolour. Instead each
-// floor gets a real clickable point on the model's surface, calibrated from
-// a screenshot the user marked up: for each marked pixel, a headless
-// instance of this same page at the same default camera state called
-// model-viewer's own positionAndNormalFromPoint(x, y) — its public
-// raycasting API — to get the actual 3D point on the mesh, at the same
-// camera-orbit this component sets on mount for Ground/Apartment 01. Floor
-// 10 wasn't marked (cropped out of the screenshot) so it has no hotspot yet,
-// though it's still reachable from the floor dropdown.
+// Unlike the previous handoff, this GLB's floors are real separate nodes
+// (Layer:1, Layer:3 … Layer:10 — the architects' export has no Layer:2) each
+// with its own material, so floors can be addressed directly instead of via
+// a calibrated screenshot hack. Both the hotspot position and the material
+// index below were read straight from the file's node transforms and
+// mesh/material indices (each floor layer maps 1:1 to a material slot).
+const FLOOR_MATERIAL_INDEX: Record<string, number> = {
+  '1': 12,
+  '3': 1,
+  '4': 2,
+  '5': 3,
+  '6': 4,
+  '7': 8,
+  '8': 7,
+  '9': 6,
+  '10': 5,
+};
+
+// One point per floor at the top-front edge of its slab, computed from the
+// node's own bounding box and transform (bbox center in X/Y, max Z for the
+// front-top edge) rather than marked up by hand.
 const FLOOR_HOTSPOTS: { floor: string; position: string }[] = [
-  { floor: 'Ground', position: '-4.856 6.711 14.7' },
-  { floor: '01', position: '-3.063 10.167 15.5' },
-  { floor: '02', position: '-6.08 12.825 14.7' },
-  { floor: '03', position: '-7.541 15.304 14.7' },
-  { floor: '04', position: '-10.915 19.194 14.888' },
-  { floor: '05', position: '-9.472 22.681 16.637' },
-  { floor: '06', position: '-10.91 25.018 14.823' },
-  { floor: '07', position: '-9.696 28.3 16.655' },
-  { floor: '08', position: '-10.623 31.332 15.046' },
-  { floor: '09', position: '-10.005 34.33 16.083' },
+  { floor: '1', position: '-1.831 7.560 -0.779' },
+  { floor: '3', position: '-0.863 13.160 0.216' },
+  { floor: '4', position: '-1.807 15.960 0.216' },
+  { floor: '5', position: '-1.807 18.760 0.216' },
+  { floor: '6', position: '-6.497 21.560 2.305' },
+  { floor: '7', position: '-6.497 24.360 2.305' },
+  { floor: '8', position: '-1.823 27.160 5.025' },
+  { floor: '9', position: '-1.823 29.960 5.025' },
+  { floor: '10', position: '-1.823 32.760 5.025' },
 ];
+
+const WINDOWS_MATERIAL_INDEX = 22;
+const WATER_MATERIAL_INDEX = 26;
+const GREEN_MATERIAL_INDICES = new Set([9, 10]);
+const ROAD_MATERIAL_INDEX = 25;
+
+const FACADE_COLOR: [number, number, number, number] = [0.62, 0.53, 0.4, 1];
+const FLOOR_DIM_COLOR: [number, number, number, number] = [0.32, 0.29, 0.25, 1];
+const FLOOR_HIGHLIGHT_COLOR: [number, number, number, number] = [0.92, 0.32, 0.06, 1];
 
 /**
  * The Sky34 interactive 3D viewer, built by Manus and handed off as a
@@ -72,15 +91,15 @@ export default function Sky34Viewer() {
   const [loaded, setLoaded] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
-  const [selectedFloor, setSelectedFloor] = useState('Ground');
+  const [selectedFloor, setSelectedFloor] = useState('1');
   const [selectedApartment, setSelectedApartment] = useState('Apartment 01');
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const materialsRef = useRef<any[]>([]);
 
   // Unit codes follow floor-number + two-digit position (e.g. floor 5's
-  // second unit is "502"; ground floor's first is "001") — a systematic
-  // placeholder, not real unit numbering, until an approved schedule exists.
-  const floorNum = selectedFloor === 'Ground' ? 0 : Number(selectedFloor);
+  // second unit is "502") — a systematic placeholder, not real unit
+  // numbering, until an approved schedule exists.
+  const floorNum = Number(selectedFloor);
   const floorUnits = [1, 2, 3, 4].map((i) => ({
     code: `${floorNum}${String(i).padStart(2, '0')}`,
     apartment: `Apartment ${String(i).padStart(2, '0')}`,
@@ -100,39 +119,52 @@ export default function Sky34Viewer() {
       setLoaded(true);
       const materials = viewer.model?.materials ?? [];
       materialsRef.current = materials;
-      materials.forEach((material: any) => {
-        const name = material.name.toUpperCase();
+      // Unlike the previous model, this GLB carries no material names (every
+      // slot is an unlabelled CAD "fallback Material"), so roles are matched
+      // by index instead — read directly from the file's own mesh/material
+      // list rather than guessed from a name. Floor materials start at the
+      // facade tone here; the effect below recolours them per selection.
+      materials.forEach((material: any, index: number) => {
         const pbr = material.pbrMetallicRoughness;
         if (!pbr) return;
-        // Facade previously rendered as a near-black brown, which read as one
-        // flat mass rather than a building — the doc's own material table
-        // calls it "warm sand/limestone", so it needed to actually be light.
-        // Pool is now teal rather than a second navy, so it doesn't read as
-        // more glazing; the neutral fallback (recesses, undersides) is a
-        // warm mid-gray instead of near-black, so those surfaces still hold
-        // a hair of light rather than disappearing into shadow.
-        const color: [number, number, number, number] = name.includes('GLASS')
+        const isGlazing = index === WINDOWS_MATERIAL_INDEX;
+        const isWater = index === WATER_MATERIAL_INDEX;
+        const isGreen = GREEN_MATERIAL_INDICES.has(index);
+        const isRoad = index === ROAD_MATERIAL_INDEX;
+        const color: [number, number, number, number] = isGlazing
           ? [0.035, 0.18, 0.42, 1]
-          : name.includes('POOL')
+          : isWater
             ? [0.02, 0.32, 0.34, 1]
-            : name.includes('LIGHT')
-              ? [0.92, 0.32, 0.06, 1]
-              : name.includes('WARM WHITE FACADE')
-                ? [0.62, 0.53, 0.4, 1]
-                : [0.32, 0.28, 0.24, 1];
+            : isGreen
+              ? [0.22, 0.34, 0.19, 1]
+              : isRoad
+                ? [0.34, 0.34, 0.34, 1]
+                : FACADE_COLOR;
         pbr.setBaseColorFactor(color);
-        pbr.setMetallicFactor(name.includes('GLASS') ? 0.28 : 0.02);
-        pbr.setRoughnessFactor(name.includes('GLASS') ? 0.12 : 0.56);
+        pbr.setMetallicFactor(isGlazing ? 0.28 : 0.02);
+        pbr.setRoughnessFactor(isGlazing ? 0.12 : 0.56);
       });
     };
     viewer.addEventListener('load', onLoad);
     return () => viewer.removeEventListener('load', onLoad);
   }, []);
 
+  // Highlights the selected floor's slab and dims the rest, so the tower
+  // stays fully visible rather than isolating one level in a cutaway.
+  useEffect(() => {
+    if (!loaded) return;
+    const materials = materialsRef.current;
+    for (const [floor, index] of Object.entries(FLOOR_MATERIAL_INDEX)) {
+      const pbr = materials[index]?.pbrMetallicRoughness;
+      if (!pbr) continue;
+      pbr.setBaseColorFactor(floor === selectedFloor ? FLOOR_HIGHLIGHT_COLOR : FLOOR_DIM_COLOR);
+    }
+  }, [selectedFloor, loaded]);
+
   useEffect(() => {
     const viewer = viewerRef.current;
     if (!viewer) return;
-    const floorIndex = selectedFloor === 'Ground' ? 0 : Number(selectedFloor);
+    const floorIndex = Number(selectedFloor);
     const apartmentIndex = Number(selectedApartment.slice(-2)) || 1;
     const elevation = Math.max(38, 74 - floorIndex * 3.2);
     const azimuth = 22 + apartmentIndex * 8;
@@ -192,9 +224,7 @@ export default function Sky34Viewer() {
           <div className="results-panel__header">
             <div className="results-panel__title">
               <span>{floorUnits.length} results</span>
-              <span className="selection-count">
-                {selectedFloor === 'Ground' ? 'Ground floor' : `Floor ${selectedFloor}`}
-              </span>
+              <span className="selection-count">Floor {selectedFloor}</span>
             </div>
             <div className="results-panel__tools">
               <span className="results-sort">
@@ -225,7 +255,7 @@ export default function Sky34Viewer() {
                   </div>
                   <div className="result-card__stat">
                     <span>Floor</span>
-                    <strong>{selectedFloor === 'Ground' ? 'Ground' : selectedFloor}</strong>
+                    <strong>{selectedFloor}</strong>
                   </div>
                 </div>
                 <div className="result-card__plan" role="img" aria-label="Floor plan preview pending upload">
@@ -353,7 +383,7 @@ export default function Sky34Viewer() {
                 className={`floor-hotspot${floor === selectedFloor ? ' is-active' : ''}`}
                 data-position={position}
                 data-normal="0 0 1"
-                aria-label={floor === 'Ground' ? 'Ground floor' : `Floor ${floor}`}
+                aria-label={`Floor ${floor}`}
                 onClick={() => setSelectedFloor(floor)}
               >
                 <span className="floor-hotspot__ring" />
@@ -373,8 +403,7 @@ export default function Sky34Viewer() {
           <div>
             <span className="callout-label">Selected level</span>
             <strong>
-              {selectedFloor === 'Ground' ? 'Ground floor' : `Floor ${selectedFloor}`} ·{' '}
-              {selectedApartment.replace('Apartment ', 'A-')}
+              Floor {selectedFloor} · {selectedApartment.replace('Apartment ', 'A-')}
             </strong>
           </div>
           <i className="callout-color" />
