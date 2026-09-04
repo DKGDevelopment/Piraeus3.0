@@ -26,10 +26,13 @@ export type SequenceConfig = {
 /**
  * The descent chapter is a single Bunny CDN video, scrubbed by seeking
  * currentTime instead of drawing an image sequence — see VideoSequenceLayer.
- * Encode: 3840x2160, CBR, 30fps.
+ * Encode: 3840x2160, 30fps. MP4/H.264 rather than WebM/VP9: consumer
+ * encoders default H.264 to a short keyframe interval, which arbitrary-seek
+ * scrubbing depends on — the original WebM export had keyframes too sparse
+ * for the browser to repaint most of the seeks a scroll makes.
  */
 export const HERO_VIDEO = {
-  src: 'https://piraeusgate.b-cdn.net/Piraeus%20Gate%20Sequence%201.webm',
+  src: 'https://piraeusgate.b-cdn.net/My%20Video-5.mp4',
   width: 3840,
   height: 2160,
 };
